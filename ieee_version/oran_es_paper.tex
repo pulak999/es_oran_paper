@@ -51,8 +51,10 @@ Keywords.
 \section{Introduction}
 Introduction.
 \\
-- The objective of this paper is to describe an rApp hosted by a Non-Real-Time RIC which controls a set of gNBs in a 5G network, which has the capability of reducing the network energy consumption during low traffic period by selectively shutting down specific sectors. \\
-- - While a mobile network consists of multiple parts, the radio access network (RAN) is responsible for most of the energy consumption in a mobile network. ==> 
+- The objective of this paper is to describe an rApp hosted by a Non-Real-Time RIC which controls a set of gNBs in a 5G network, which has the capability of reducing the network energy consumption during low traffic period by selectively shutting down specific sectors. The document describes the design of rApp and the requirements in terms of input data and the controls required over the network element for proper functoning of the rApp. It does not dwell into the details of the plaTorms hos+ng the rApp or the network func+ons or simula+ons thereof which provide data to the rApp. \\
+- We use simple time-based thresholds to determine WHEN to turn the cell(s) OFF/ON i.e, on a day if at XX:XX hrs, if traffic volume is less than XXX Mbps, turn the cell off or otherwise \\
+- Proposes turning ON/OFF a cell based on “Degree of overlap” of coverage. Cells with higher degree of overlap can be served with overlapping cells hence qualify earlier. Cross-validation is done by building a digital twin of the underlying network and implement the decision (ON/OFF) on it to validate the metrics of significance for network operator: 1) Spectral efficiency, 2) CQI distributions, 3) Active users, 4) NW Throughput \\
+- While a mobile network consists of multiple parts, the radio access network (RAN) is responsible for most of the energy consumption in a mobile network. ==> 
 Green Future Networks – Sustainability Challenges and Initiatives in Mobile Networks by NGMN Alliance,
 December 2021
 \href{https://www.ngmn.org/wp-content/uploads/210719_NGMN_GFN_Sustainability-Challenges-andInitiatives_v1.0.pdf} \\
@@ -78,17 +80,6 @@ periodically checks the service load of multiple carriers and if the service loa
 - First, the E2 Nodes are configured by the Service Management and Orchestration (SMO) to report the data necessary for energy-saving algorithms via the O1 Interface to the Collection and Control unit. Assuming that the Non-RT RIC and SMO are tightly coupled the NonRT RIC retrieves the collected data through internal SMO communication \textcolor{green}{how???}. The O-RUs are involved in this use case. The E2 Nodes need to configure them to report data through the Open RAN Fronthaul Management Plane (Open FH M-Plane) interface.\\
 - Before switching off/on carrier(s) and/or cell(s), the E2 Node may need to perform some preparation actions for off switching (e.g. check ongoing emergency calls and warning messages, to enable, disable, modify Carrier Aggregation and/or Dual Connectivity, to trigger HO traffic and UEs from cells/carriers to other cells or carriers, informing neighbour nodes via X2/Xn interface etc.) as well as for on switching (e.g., cell probing, informing neighbour nodes via X2/Xn interface etc.). \\
 
-\subsection{Key Questions}
-\textcolor{blue}{
-Key questions to answer to implement above: \\
-- Key question 1 - When to turn off and on the cells? \\
-- Key question 2 - Which cells to turn on and off? \\
-- Key question 3 - what is the goodness measure of particular energy saving decision \\
-}
-
-
-\section{Related Works}
-
 Network traffic prediction has always been a largely explored subject in networking, with a flurry of recent proposals ushered in by the recent development of machine and deep learning tools. Such deep learning-based algorithms have recently been explored to find potential representations of network traffic flows for all types of networks, including Internet, cellular, etc. We first categorize cellular traffic problems into two main types – temporal prediction problems and spatiotemporal prediction problems. Modelling the traffic flow through a node exclusively as a time series is an example of the temporal approach towards network traffic prediction [11]. High traffic on a given node in a cellular network often implies a high load on the other nearby nodes. Taking the traffic flow of nearby nodes and other external factors into consideration when modelling is known as the spatiotemporal approach to network traffic prediction. Spatiotemporal approaches are found to give slightly more accurate forecasts [12].
 
 Both types of problems can be formulated as supervised learning problems with a difference being in the form of feature representation. In the temporal approach, the collected traffic data can be represented as a univariate time series and the prediction for the values in the future time steps is based on the historical data of the past time steps. In [13], Clemente et Al used Naive Bayes classification and the Holt-Winters method to perform the temporal network forecasting in real time Clemenete et Al first performed systematic preprocessing to reduce bias by selecting the cells with less missing data occurrences, which was then selected to train the classifies to allocate the cells between predictable and non- predictable, taking into account previous traffic forecast error. 
@@ -109,26 +100,163 @@ Hybrid models can handle a variety of data types and structures, making them ide
 
 *last 1 para for the novelty of our paper compared to existing work. should i write anything here?* \textcolor{red}{\textit{something like: } To the best of our knowledge, comparisons between ARIMA, Prophet, LSTM trained on a single dataset but applied in various conditions have not been well studied in the literature}
 
-\section{Algorithm Description}
-
-\subsection{ES rApp}
-Energy Saving rApp.
+\subsection{Key Questions}
+\textcolor{blue}{
+Key questions to answer to implement above: \\
+- Key question 1 - When to turn off and on the cells? \\
+- Key question 2 - Which cells to turn on and off? \\
+- Key question 3 - what is the goodness measure of particular energy saving decision \\
 \\
-- The rApp is data driven in the sense that it does not incorporate a rules-based logic but determines the rules which meet the target objective based on the input data and network configuration. The rApp has the following components: \\
-- \textcolor{blue}{[PULAK] More information on each of these sub}
-1. The Radio Database, which is a geospatial database, where data is indexed using the latitude, longitude, and altitude and includes the clutter information. For a mobile network, this database is initialized with the network inventory information and the predicted RF power (downlink) for each pixel from all the sectors in the vicinity greater than a predefined threshold (Pth) using a Radio Link budget simulator using the local clutter data. All the timestamped measurement reports from the gNBs are stored in the database as a sliding window with preconfigured depth (td). This Radio Database can also be external to the rApp so that it can be shared across multiple rApps. It can also import data from RF link simulators and drive tests through an external interface. \\
-2.  The Traffic Predictor, which predicts the net traffic volume, Percentage PRB utilization and the number of active UEs as a function of time for each sector based on historical data and the previous measurements stored. Based on the historical inputs ARIMA/SERIMA Algorithm is used to predict those (all the 3 bullet points above) values for the future. The input information is expected in the time interval of 15 minutes. \\
-3. The Coverage Predictor, which predicts the overlap of coverage of each sector with respect to the adjacent sectors. The Coverage Predictor also updates the link level prediction model based on the measured values. \\
-4. The Energy Saving Decision Entity: Simulation which uses the results of the Traffic Predictor and the Coverage Predictor to determine the sectors in the network, which can be shut down with the least impact in the services. The Simulator evaluates the impact of the Energy Saving Decision Entity before configuring the network through the SMO or EMS \\
-4. The Anomaly Detection Entity, which matches the real-time measurements and the results of the Traffic and Coverage Predictor to find anomalies. If there is a major deviation of the measured and predicted values, the energy saving decision making process is suspended. \\
-
-A Dashboard for visualization of the Radio Mapping Database is also used. 
 \textit{How does this link to the TS xApp?}
+}
 
-\subsection{Algorithm}
+\section{Energy Saving rApp}
+
+\textcolor{blue}{Good intro required here}. The rApp is data driven in the sense that it does not incorporate a rules-based logic but determines the rules which meet the target objective based on the input data and network configuration. A Dashboard for visualization of the Radio Mapping Database is also used. The rApp has the following components: \\
+
+\subsection{Architecture Overview}
+
+\subsubsection{Digital Twin}
+
+Uses CloudRF to determine the coverage. Simulation which takes our parameters if need into context. \textcolor{red}{More information required.} \\
+
+\subsubsection{Radio Database}
+
+The \textbf{Radio Database} is a geospatial database that indexes data using latitude, longitude, and altitude, including clutter information. Currently cloudRF has internal clutter database and we rely on it (it is not exposed outside cloudRF). \textcolor{red}{This database is initialized with network inventory and predicted RF power (downlink) for each pixel from sectors exceeding a predefined threshold (Pth). \textbf{How is threshold decided? - Sensitivity of mobile devices in use. Defined by user.}}. The predictions are generated using a Radio Link budget simulator, using CloudRF. Additionally, the database stores timestamped measurement reports from gNBs in a sliding window with a preconfigured depth (td). Notably, this Radio Database can be external to the rApp, allowing it to be shared across multiple rApps. It also has the capability to import data from RF link simulators and drive tests through an external interface. \\
+
+\subsubsection{Traffic Predictor}
+
+The \textbf{Traffic Predictor} estimates the net traffic volume, percentage PRB utilization, and the number of active UEs for each sector as a function of time. This prediction is based on historical data and previous measurements. The Traffic Predictor employs ARIMA/SERIMA algorithms to forecast these values for the future. Input information for this component is expected in 15-minute intervals. \\
+
+\textcolor{red}{Are LSTMs used here? Refer to Doc2.}
+
+\subsection{Coverage Predictor}
+
+The Coverage Predictor is responsible for predicting the coverage overlap between adjacent sectors. It also updates the link level prediction model based on actual measured values to enhance accuracy. The input to the system is the simulated received power level (obtained from cloudRF) for each pixel from all the sectors with contributions higher than Pth. \textcolor{red}{How is Pth decided?} \\
+
+\textcolor{blue}{Convert to Algo}
+Following steps are followed: \\
+Step-C1: For each pixel, find the sector which has the highest power to that pixel. This is marked as the serving sector. This step determines the sector boundaries in the network. The other contributors are marked as interfering power. \\
+Step-C2: For each sector iden+fied in step C1, find the overlap in coverage with adjacent sectors. This is done using the following steps: \\
+	- Step-C2.1: Two sectors Si and Sj are deemed adjacent if there exists a pixel in Si where Sj is the strongest interferer and also if there exists a pixel in Sj where Si is the strongest interferer.
+	- Step-C2.2: For all pairs of sectors Si and Sj iden+fied in Step-C2.1, find the count of pixels in Si, where Sj is the strongest interferer and all the pixels in Sj where Si is the strongest interferer. Find the value Eij, which is the sum of all the pixels thus iden+fied.
+	- Step-C2.3: Generate the Overlap Graph of the network where each sector Si is the vertex while the Eij computed in Step-C2.2 is the weighted edge
+
+\begin{comment}
+\begin{algorithm} [H]
+\caption{Coverage Predictor}
+\label{alg:control_application}
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{DecisionVariables}
+
+\SetKwProg{Fn}{Function \emph{applyControl}}{}{end}
+\Fn{}{
+    delay $\gets$ EWMA(delay, delay_in)\;
+    
+    \While{True}
+    {
+        \If{$condition1$}
+        {
+            \Return{$CellBringup$}\;
+        }
+        \ElseIf{$condition2$}
+        {
+            \Return{$CellShutdown$}\;
+        }
+        \Else
+        {
+            $NoChange$\;
+        }
+    }
+}
+
+\Output{$Control\_Action$} % Adjust the output based on your actual output
+
+\end{algorithm}
+\end{comment}
+
+
+\subsection{Energy Saving Decision Entity}
+
+The \textbf{Energy Saving Decision Entity} utilizes the results from both the Traffic Predictor and the Coverage Predictor to identify sectors in the network that can be shut down with minimal service impact. This entity performs simulations to evaluate the impact of energy-saving decisions before configuring the network through the SMO or EMS. \textcolor{blue}{The functioning of this entity is defined in Algo. 1}
+
+1. For each sector Si, iden+fy sectors Sj, Sk, . . . , Su, which has an edge with Si as found from the Coverage Predictor \\
+2. From the historical results of the Traffic Predictor, for each sector Si, find a set of vectors Ri(n) <rj, rk, . . . , ru>, where each component of the vector is the PRB u+liza+on ra+o of the corresponding sector, such that it occurs concurrently and the magnitude of the distance between any two such vectors is greater than defined threshold. \textcolor{red}{What does this mean? What is the point of this being taken?} \\
+
+3. SINR calculation. the strength of the wanted signal compared to the unwanted interference and noise. Mobile network operators seek to maximize SINR at all sites to deliver the best possible customer experience, either by transmitting at a higher power, or by minimizing the interference and noise. \\
+
+4. CQI calculation - \textcolor{red}{Table published by 3GPP.} \\
+
+Where Pi is the es+mated received power in the pixel from sector i (serving sector) and Pj, Pk, . . . Pu are the es+mated received interference power from all the adjacent sectors. PB is the background noise associated with Sector Si. All the above power values are in Wafs. If the input values are in dBm, they need to be converted to Wafs. The SINR value is a ra+o. If the value needs to be in dB, it must be converted accordingly.
+
+\subsection{Anomaly Detection Entity}
+
+Finally, the \textbf{Anomaly Detection Entity} compares real-time measurements with the results from the Traffic and Coverage Predictors to identify anomalies. If significant deviations between the measured and predicted values are detected, the energy-saving decision-making process is suspended to prevent potential issues.
+
+\textcolor{red}{
+Questions To Ask: \\
+- Is the decision made periodically? - 1hr prediction, 15 minutes slots (every 15 minutes) \\
+- How does this link to the TS xApp? - receive a policy from the rApp \\
+- More information is required for the Shutdown part - go through Doc1 again Pulak \\
+- What is the output of the algorithm? Does it send a reccomendation to the Near-RT RIC over what to do? - sends a policy, sent as a declarative statement. sent across A1 interface. \\}
+
+\begin{comment}
+\begin{algorithm} [H]
+\caption{Control Application to the RAN Stack}
+\label{alg:control_application}
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{DecisionVariables}
+
+\SetKwProg{Fn}{Function \emph{applyControl}}{}{end}
+\Fn{}{
+    delay $\gets$ EWMA(delay, delay_in)\;
+    
+    \While{True}
+    {
+        \If{$condition1$}
+        {
+            \Return{$CellBringup$}\;
+        }
+        \ElseIf{$condition2$}
+        {
+            \Return{$CellShutdown$}\;
+        }
+        \Else
+        {
+            $NoChange$\;
+        }
+    }
+}
+
+\Output{$Control\_Action$} % Adjust the output based on your actual output
+
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{Cell Shutdown Procedure}
+\label{alg:cellshut}
+\SetKwProg{generate}{Function \emph{CellShutdown}}{}{end}
+
+Map store=new Map(obj, queue)\;
+\generate{Object pivot}{
+     \ForAll{child $c$ in pivot}{
+     \If{ $c$'s FieldContext is not set and $c$ is fusible}{
+          generate($c$)\;
+      }
+     }
+     build pivot's fieldContext $fc$\;
+     EmitClassName\;
+     EmitFields($fc$)\;
+     EmitMethods($fc$)\;
+}
+\end{algorithm}
 
 \begin{algorithm}
-\caption{CellShutdown Procedure}
+\caption{Cell Shutdown Procedure}
 \SetAlgoLined
 \KwData{Lat-long of all the transmitters (antenna characteristics, antenna height, etc.)}
 \KwData{Field strength at any point from all the transmitters (using CloudRF)}
@@ -160,7 +288,7 @@ With this candidate being shutdown (power = 0), find the SINR distribution (in d
 \end{algorithm}
 
 \begin{algorithm}
-\caption{CellBringup Procedure}
+\caption{Cell Bringup Procedure}
 \SetAlgoLined
 \KwData{For each cell we have desired pattern for CQI distribution for each traffic pattern and time of day}
 \For{each cell}{
@@ -178,31 +306,45 @@ With this candidate being shutdown (power = 0), find the SINR distribution (in d
 }
 \end{algorithm}
 
-\textcolor{red}{
-[IMP] 
-- how do you decide whether the system is to be considered for shutdown or bringup? \\
-- use of SINR? \\
-- where does the prediction part come into play? \\
-}
+\begin{algorithm}
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
 
-\section{Methodology}
+    \underline{function CellBringup} $()$\;
+    \Input{Two nonnegative integers $a$ and $b$}
+    \Output{$\gcd(a,b)$}
+    \eIf{$b=0$}
+      {
+        return $a$\;
+      }
+      {
+        return Euclid$(b,a\mod b)$\;
+      }
+    \caption{Algorithm}
+\end{algorithm}
+\end{comment}
+
+\section{\textcolor{blue}{[WORKSHOP]}Design Rationale}
 Methodology.
 
 \subsection{Model Selection}
-Model Selection.
+Model Selection. \textcolor{blue}{Why did we select the model we did?}
 
 \subsection{Data Selection}
-Data Selection.
+Data Selection. \textcolor{blue}{How did we select data to train our model on? How did we know the model will work with less data?}
 
 \subsection{Performance Metrics}
-Performance Metrics.
+Performance Metrics. \textcolor{blue}{Might not be needed if explained well in previous section.}
 
 \section{Experiments and Results}
 CQI + total throughput + energy consumption. \\
 
-- [This should otherwise describe the overall system architecture and where does the rApp reside and
-with which other components it interacts with.] \\
-- Use Case Description - [This section shall describe the use case applicable to the energy saving scheme implemented here. Please use PlantUML or equivalent to describe the interaction between several actors which achieve the end result. Refrain from giving details of operation at each actor and focus on the interactions]
+- This should otherwise describe the overall system architecture and where does the rApp reside and
+with which other components it interacts with.\\
+\\
+- Setup \\
+- Explain why we are taking these results in particular \\
+- two/three seperate setups, show CQI and throughput are still good, while energy consumption reduces \\
 
 \section{Conclusions}
 Conclusions.

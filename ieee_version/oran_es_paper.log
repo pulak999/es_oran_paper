@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  12 JUL 2024 01:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  23 JUL 2024 15:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -670,63 +670,63 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--50
  []
 
 
-Underfull \hbox (badness 2443) in paragraph at lines 52--80
+Underfull \hbox (badness 2443) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 - O-RAN can con-tribute to this ef-fort im-mensely. Its
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 
  []
 
 
-Underfull \hbox (badness 2173) in paragraph at lines 52--80
+Underfull \hbox (badness 2173) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 with-out af-fect-ing the user ex-pe-ri-ence (call drops, QoS
  []
 
 
-Underfull \hbox (badness 2119) in paragraph at lines 52--80
+Underfull \hbox (badness 2119) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 degra-da-tion, etc.) is one way to achieve RAN en-ergy
  []
 
 
-Underfull \hbox (badness 1603) in paragraph at lines 52--80
+Underfull \hbox (badness 1603) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 booster cells are de-ployed un-der the um-brella of cells
  []
 
 
-Underfull \hbox (badness 1629) in paragraph at lines 52--80
+Underfull \hbox (badness 1629) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 - https://networkbuilders.intel.com/solutionslibrary/a-holistic
 -
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 study-of-power-consumption-and-energy-savings-strategies-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 - []Of-fline learn-ing is nor-mally pre-ferred (in-clud-ing
  []
 
 
-Underfull \hbox (badness 2644) in paragraph at lines 52--80
+Underfull \hbox (badness 2644) in paragraph at lines 52--82
 \OT1/ptm/m/n/10 - First, the E2 Nodes are con-fig-ured by the Ser-vice
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 52--80
+Underfull \hbox (badness 10000) in paragraph at lines 52--82
 
  []
 
@@ -735,91 +735,161 @@ ocal/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc}
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 98--99
-
- []
-
-
-Underfull \hbox (badness 3354) in paragraph at lines 100--101
-[]\OT1/ptm/m/n/10 - This im-ple-men-ta-tion is akin to a traf-fic steer-ing
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 100--101
-\OT1/ptm/m/n/10 xApp, as it in-volves of-fload-ing traf-fic from low-
- []
-
-
-Underfull \hbox (badness 2326) in paragraph at lines 100--101
-\OT1/ptm/m/n/10 load cells to other cells, en-sur-ing that as many RUs
- []
-
-
-Underfull \hbox (badness 3965) in paragraph at lines 100--101
-\OT1/ptm/m/n/10 as pos-si-ble can en-ter a low-power sleep mode. The
- []
-
-
-Underfull \hbox (badness 5667) in paragraph at lines 100--101
-\OT1/ptm/m/n/10 han-dovers and traf-fic re-dis-tri-bu-tion are pre-dicted and
- []
-
-
-Underfull \hbox (badness 1490) in paragraph at lines 100--101
-\OT1/ptm/m/n/10 en-ergy ef-fi-ciency of the net-work. ==> https://www.diva-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 100--101
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 102--103
+Underfull \hbox (badness 3354) in paragraph at lines 91--92
+[]\OT1/ptm/m/n/10 - This im-ple-men-ta-tion is akin to a traf-fic steer-ing
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+\OT1/ptm/m/n/10 xApp, as it in-volves of-fload-ing traf-fic from low-
+ []
+
+
+Underfull \hbox (badness 2326) in paragraph at lines 91--92
+\OT1/ptm/m/n/10 load cells to other cells, en-sur-ing that as many RUs
+ []
+
+
+Underfull \hbox (badness 3965) in paragraph at lines 91--92
+\OT1/ptm/m/n/10 as pos-si-ble can en-ter a low-power sleep mode. The
+ []
+
+
+Underfull \hbox (badness 5667) in paragraph at lines 91--92
+\OT1/ptm/m/n/10 han-dovers and traf-fic re-dis-tri-bu-tion are pre-dicted and
+ []
+
+
+Underfull \hbox (badness 1490) in paragraph at lines 91--92
+\OT1/ptm/m/n/10 en-ergy ef-fi-ciency of the net-work. ==> https://www.diva-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--105
+Underfull \hbox (badness 10000) in paragraph at lines 93--94
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 \OT1/ptm/m/n/10 https://rimedolabs.com/blog/es-rapp-control-over-ts-xapp-in-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--105
+Underfull \hbox (badness 10000) in paragraph at lines 95--96
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 106--107
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
 \OT1/ptm/m/n/10 ran.org/classic/generation/2024/category/intelligent-ran-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 106--107
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--109
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
 \OT1/ptm/m/n/10 us/service-provider-transformation/delivering-on-the-o-ran-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--109
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--124
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 201--202
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
-[3]
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
+
+ []
+
+
+Underfull \hbox (badness 1803) in paragraph at lines 129--130
+ \OT1/ptm/m/it/10 3) Traf-fic Pre-dic-tor: [][][] \OT1/ptm/m/n/10 The \OT1/ptm/
+b/n/10 Traf-fic Pre-dic-tor \OT1/ptm/m/n/10 es-ti-mates
+ []
+
+
+Underfull \hbox (badness 1776) in paragraph at lines 129--130
+\OT1/ptm/m/n/10 the net traf-fic vol-ume, per-cent-age PRB uti-liza-tion, and
+ []
+
+
+Underfull \hbox (badness 5189) in paragraph at lines 129--130
+\OT1/ptm/m/n/10 pre-vi-ous mea-sure-ments. The Traf-fic Pre-dic-tor em-ploys
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--130
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--136
+
+ []
+
+[3] Excluding 'comment' comment.
+Underfull \hbox (badness 10000) in paragraph at lines 185--187
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 188--189
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 190--191
+
+ []
+
+Excluding 'comment' comment.
+Underfull \hbox (badness 10000) in paragraph at lines 340--341
+
+ []
+
+
+Underfull \hbox (badness 2343) in paragraph at lines 342--348
+[]\OT1/ptm/m/n/10 - This should oth-er-wise de-scribe the over-all sys-tem
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--348
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--348
+
+ []
+
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -832,30 +902,31 @@ Before submitting the final camera ready copy, remember to:
  process uses the appropriate paper size.
 
 [4] (./oran_es_paper.aux)
-Package rerunfilecheck Info: File `oran_es_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 78F38940077C99C7D7D459E2C235C2B4;1663.
+
+Package rerunfilecheck Warning: File `oran_es_paper.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `oran_es_paper.out':
+(rerunfilecheck)             Before: 699B0343398D1BE268AEFE343BCF31E0;2531
+(rerunfilecheck)             After:  2C994D27ED6B198FC8CDF0359E984192;2559.
  ) 
 Here is how much of TeX's memory you used:
- 14495 strings out of 476025
- 241708 string characters out of 5790017
- 1875388 words of memory out of 5000000
- 34689 multiletter control sequences out of 15000+600000
- 549491 words of font info for 96 fonts, out of 8000000 for 9000
+ 14453 strings out of 476025
+ 241230 string characters out of 5790017
+ 1874388 words of memory out of 5000000
+ 34688 multiletter control sequences out of 15000+600000
+ 546852 words of font info for 92 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,18n,77p,1333b,597s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7
-.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
-pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pf
-b></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></
-usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/
-texlive/2023/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2
-023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/texmf-
-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on oran_es_paper.pdf (4 pages, 116972 bytes).
+ 75i,11n,77p,1333b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/lo
+cal/texlive/2023/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texli
+ve/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2023/te
+xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on oran_es_paper.pdf (4 pages, 77714 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 161 compressed objects within 2 object streams
- 62 named destinations out of 1000 (max. 500000)
- 113 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
+ 23 named destinations out of 1000 (max. 500000)
+ 145 words of extra memory for PDF output out of 10000 (max. 10000000)
 
