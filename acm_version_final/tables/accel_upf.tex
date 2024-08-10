@@ -1,0 +1,25 @@
+\begin{table}[t]
+\caption{
+Comparision of PFCP forwarding performance of UPFs
+}
+\label{tab:accel_upf}
+% \vspace{-1.0em}
+\resizebox{0.9\columnwidth}{!}{%
+% \footnotesize
+% \vspace{-2em}
+\begin{tabular}{lcc}
+\hline
+\textbf{UPF design} & \multicolumn{1}{l}{\textbf{Throughput(Mpps)}} & {\textbf{RTT($\mu$s)}}\\ \hline
+SoftwareUPF               & 11.93       &85 \\
+GTPOffload Netronome            & 10.51     &71    \\
+GTPOffload Tofino      & 11.94    &49   \\
+GTPOffload Tofino(with \sysname)      & xx\%    &\%   \\
+AccelUPF Netronome            & 4.83\%      &6.3\%   \\ 
+AccelUPF Tofino               & 11.94\%          &33.9\%  \\ 
+AccelUPF Tofino(with \sysname)  & xx\%          &33.9\%  \\ 
+\hline
+\end{tabular}
+}
+\centering
+\vspace{-1em}
+\end{table}

@@ -1,0 +1,65 @@
+\section{rApp Architecture And Components}
+\label{sec:arch}
+
+\subsection{Digital Twin}
+
+Uses CloudRF to determine the coverage. Simulation which takes our parameters if need into context. \textcolor{red}{More information required.} \\
+
+\subsection{Radio Database}
+
+The \textbf{Radio Database} is a geospatial database that indexes data using latitude, longitude, and altitude, including clutter information. Currently cloudRF has internal clutter database and we rely on it (it is not exposed outside cloudRF). \textcolor{red}{This database is initialized with network inventory and predicted RF power (downlink) for each pixel from sectors exceeding a predefined threshold (Pth). \textbf{How is threshold decided? - Sensitivity of mobile devices in use. Defined by user.}}. The predictions are generated using a Radio Link budget simulator, using CloudRF. Additionally, the database stores timestamped measurement reports from gNBs in a sliding window with a preconfigured depth (td). Notably, this Radio Database can be external to the rApp, allowing it to be shared across multiple rApps. It also has the capability to import data from RF link simulators and drive tests through an external interface. \\
+
+\subsection{Traffic Predictor}
+
+The \textbf{Traffic Predictor} estimates the net traffic volume, percentage PRB utilization, and the number of active UEs for each sector as a function of time. This prediction is based on historical data and previous measurements. The Traffic Predictor employs ARIMA/SERIMA algorithms to forecast these values for the future. Input information for this component is expected in 15-minute intervals. \\
+
+\textcolor{blue}{How are LSTMs used here?}
+- every 1 hr, four predictions are made (+15, +30, +45, +60)
+- made on initial trained data (initial 300 entries from NS3 simulator) 
+- inputs to the LSTM model? throughput, cell to which throughput belongs, timestamp 
+
+\subsection{Coverage Predictor}
+
+The Coverage Predictor is responsible for predicting the coverage overlap between adjacent sectors. It also updates the link level prediction model based on actual measured values to enhance accuracy. The input to the system is the simulated received power level (obtained from cloudRF) for each pixel from all the sectors with contributions higher than Pth. \textcolor{red}{How is Pth decided?} \\
+
+\textcolor{blue}{Convert to Algo}
+Following steps are followed: \\
+Step-C1: For each pixel, find the sector which has the highest power to that pixel. This is marked as the serving sector. This step determines the sector boundaries in the network. The other contributors are marked as interfering power. \\
+Step-C2: For each sector iden+fied in step C1, find the overlap in coverage with adjacent sectors. This is done using the following steps: \\
+	- Step-C2.1: Two sectors Si and Sj are deemed adjacent if there exists a pixel in Si where Sj is the strongest interferer and also if there exists a pixel in Sj where Si is the strongest interferer.
+	- Step-C2.2: For all pairs of sectors Si and Sj iden+fied in Step-C2.1, find the count of pixels in Si, where Sj is the strongest interferer and all the pixels in Sj where Si is the strongest interferer. Find the value Eij, which is the sum of all the pixels thus iden+fied.
+	- Step-C2.3: Generate the Overlap Graph of the network where each sector Si is the vertex while the Eij computed in Step-C2.2 is the weighted edge
+
+\subsection{Energy Saving Decision Entity}
+
+The \textbf{Energy Saving Decision Entity} utilizes the results from both the Traffic Predictor and the Coverage Predictor to identify sectors in the network that can be shut down with minimal service impact. This entity performs simulations to evaluate the impact of energy-saving decisions before configuring the network through the SMO or EMS. \textcolor{blue}{The functioning of this entity is defined in Algo. 1}
+
+1. For each sector Si, iden+fy sectors Sj, Sk, . . . , Su, which has an edge with Si as found from the Coverage Predictor \\
+2. From the historical results of the Traffic Predictor, for each sector Si, find a set of vectors Ri(n) <rj, rk, . . . , ru>, where each component of the vector is the PRB u+liza+on ra+o of the corresponding sector, such that it occurs concurrently and the magnitude of the distance between any two such vectors is greater than defined threshold. \textcolor{red}{What does this mean? What is the point of this being taken?} \\
+
+3. SINR calculation. the strength of the wanted signal compared to the unwanted interference and noise. Mobile network operators seek to maximize SINR at all sites to deliver the best possible customer experience, either by transmitting at a higher power, or by minimizing the interference and noise. \\
+
+For each sector $S_i$, for all the unique vectors $R_i(n)$, find the SINR for all the pixels in $S_i$ using the relation:
+
+\[
+\text{SINR}_{in} = \frac{P_i}{P_j + P_k + \ldots + P_u + P_B}
+\]
+
+Where $P_i$ is the estimated received power in the pixel from sector $i$ (serving sector), and $P_j, P_k$ , $\ldots$ , $P_u$ are the estimated received interference power from all the adjacent sectors. $P_B$ is the background noise associated with Sector $S_i$. All the above power values are in Watts (W). If the input values are in dBm, they need to be converted to Watts. The SINR value is a ratio. If the value needs to be in dB, it must be converted accordingly.
+
+4. CQI calculation 
+For each sector Si, find the average SINR and CQI values for all the pixels in the sector. \\\
+The CQI values are found by refering to this table published by 3GPP [\textcolor{red}{[PRAMIT, MAKARAND] - Please provide this}] \\
+
+5. Energy Saving Decision Making \\
+\textcolor{blue}{How is threshold defined?} \\
+Based on CQI value and threshold defined earlier, the sectors are classified into two categories: \\
+- High CQI: Sectors with CQI values above the threshold. These sectors are not considered for shutdown. \\
+- Medium CQI: Sectors with CQI values below the threshold but above a certain value. These sectors are considered for shutdown. \\
+- Low CQI: Sectors with CQI values below a certain value. These sectors are considered for shutdown. \\
+%\subsection{Anomaly Detection Entity}
+%Finally, the \textbf{Anomaly Detection Entity} compares real-time measurements with the results from the Traffic and Coverage Predictors to identify anomalies. If significant deviations between the measured and predicted values are detected, the energy-saving decision-making process is suspended to prevent potential issues.
+
+%\textcolor{red}{
+%Questions To Ask: \\
+%- More information is required for the Shutdown part - go through Doc1 again Pulak \\}

@@ -1,0 +1,311 @@
+\section{Evaluation}
+\label{sec:eval}
+
+In this section, we evaluate the performance of \sysname under different configurations.
+First, we verify the correctness of our implementation against the reference implementation written in C~\cite{ascon-github} and the official test vectors.
+Next, we evaluate how the pipeline configurations (i.e., the number of {\pround}s per pipeline pass), and the input length (i.e., plaintext/ ciphertext) affect the throughput and latency.
+In \sysname, as the number of pipeline passes for decryption (including the finalization stage) is symmetrical with encryption, 
+we show only the encryption performance.
+% (with no packet loss) and omit decryption given that they are symmetrical.
+% The results shown represent the best possible throughput without any packet drops.
+Unless otherwise stated, we use only one port for recirculation. and the length of associated data (AD) is fixed at 4 bytes.
+Apart from that, we also evaluate the scalability of our implementation by varying the number of recirculation ports dedicated.
+Finally, we show the hardware resource utilization of \sysname on both Intel Tofino and Tofino2 for all evaluated configurations.
+
+\subsubsection{Evaluation Setup}
+% \paragraph{Setup}
+Our setup consists of three Intel Tofino switches.
+% and an x86-based commodity server equipped with a dual-port 100 Gbps Nvidia Mellanox ConnectX-5 NIC.
+We compile and run the different variants of \sysname using the Intel P4 Studio v9.11.2 on a two-pipeline 3.2 Tbps Intel Tofino~\cite{intel-tofino-1} and four-pipeline 12.8 Tbps Tofino2~\cite{intel-tofino-2} switch. % respectively.
+For traffic generation, we make use of the packet generator feature on a separate Intel Tofino switch. 
+% which is inter-connected with the other two switches using two 100\,Gbps copper DACs for evaluation.
+The switches are connected using 100 Gbps copper DACs.
+To measure the best possible performance, we gradually increase the packet generation rate until the point where there are no packet losses. 
+The experiments are automated and repeated for $1000$ times.
+
+\subsubsection{Interpreting the results}
+The presented results depict the maximum performance of \sysname under different configurations (e.g., \pround per pipeline pass, and number of recirculation ports).
+Given the use of recirculation, the expected throughput will be lower than that of the recirculation port's speed.
+The use of recirculation is usually perceived ``negatively'' given its overhead. 
+We would like to highlight that it is not the case if properly planned and get the performance profiled while setting aside sufficient resources for important features like \sysname. 
+Notwithstanding, switches mostly have spare packet processing capacity~\cite{sqr2019icnp}, e.g., idle ports and/or under-utilized pipelines.
+% Notwithstanding, 
+% and thus the use of recirculation can be justified for \sysname.
+Later, we will show that the resulting performance is still sufficiently fast
+% Though there is an upper limit on the rate at which \sysname can operate. 
+% It is still extremely fast and sufficient 
+considering the frequency at which in-band control updates usually need to be processed and much faster than the traditional out-of-band channel (see~\cref{sec:case}).
+% Moreover, 
+% Not to mention, 
+% \todo{add one section to discuss that even if they are not line rate, why it is still fine?}
+
+% Finally, we present a case study by integrating \sysname with an in-network KV store and study the performance impact.
+
+% \todo{must be updated.}
+
+% For brevity yet without the loss of generality, we only present the results for the Intel Tofino2, unless otherwise specified.
+% Finally, we integrate \sysname with a control-plane accelerated version of NetCache~\cite{jin2017netcache} via DySO~\cite{2023-ComputerNetworks-DySO} to study the performance.
+
+
+
+% \para{Configurations}
+% \todo{discuss the different pipeline configurations}
+
+% The experiment setup consists of a Tofino-based traffic generator and two Device-Under-Tests (DUTs), comprising an Intel Tofino and Tofino2.
+% The switches are interconnected using 100 Gbps copper DACs.
+
+% \subsection{Throughput and Latency \todo{rename this section}}
+% \label{sec:eval_tput}
+
+% \input{figures/eval_tf1_pt}
+% \input{figures/eval_tf1_rd}
+% \input{figures/eval_tf2_pt}
+% \input{figures/eval_tf2_rd}
+% \input{figures/eval_tput}
+% \input{figures/eval_latency}
+% \input{figures/eval_input_len}
+
+% \subsection{\sysname Micro-benchmarks}
+% \label{subsec:benchmark}
+
+
+% Due to space limitations, we mainly present the results for the Intel Tofino2. 
+% We mainly present Tofino2 results given space constraints. 
+% First, we present the micro-benchmarks for both Tofino and Tofino2 with different input lengths and \pround per pipeline pass.
+% In \sysname, as the number of pipeline passes for decryption is symmetrical with encryption, 
+% we show only the encryption performance.
+% % (with no packet loss) and omit decryption given that they are symmetrical.
+% % The results shown represent the best possible throughput without any packet drops.
+% Unless otherwise stated, we use only one port for recirculation. The length of associated data (AD) is fixed at 4 bytes.
+
+% \input{figures/eval_tf1_tput_latency}
+\input{figures/eval_tf2_tput_latency}
+
+\subsection{Impact of \#{\pround}s per pipeline pass}
+% \para{Impact of \#{\pround}s per pipeline pass}
+% We measure the throughput and latency for different pipeline configurations on both Intel Tofino and Tofino2.
+
+First, we look at the performance figures on how the number of pipeline passes configured for \sysname affects performance.
+We depict the results in~\cref{fig:eval_tf1_tput_lat} for Tofino and~\cref{fig:eval_tf2_tput_lat} Tofino2, respectively.
+To ease discussion, we first look at the case when the input length is 8 bytes.
+We observe that the \sysname throughput increases linearly from ${\sim}$10 Mpps to ${\sim}$40 Mpps when the number of {\pround}s per pipeline pass increases from 1 to 4 for Tofino2. 
+Similarly, on Tofino, the throughput doubles from ${\sim}$2.5 Mpps to ${\sim}$5 Mpps as {\pround}s per pass are increased from 1 to 2.
+As for the latency, we see a corresponding decrease from $23.3 \mu$s to $12.23 \mu$s for Tofino and from $25.6 \mu$s to $8.5 \mu$s on a Tofino2 switch respectively, inherently due to fewer recirculations needed for same number of {\pround}s.
+
+% while the latency decreases exponentially when more {\pround}s can be done within a pipeline pass.
+% % In~\cref{fig:eval_tput_lat}, we observe that \sysname's throughput increases linearly when the pipeline is configured with more \ascon permutation rounds.
+% Using one recirculation port in the pipeline, one can achieve up to ${\sim}$5 million packets per second (Mpps) on the Intel Tofino with 2 \ascon permutation rounds per-pipeline pass, and up to ${\sim}$40 Mpps on the Intel Tofino with 4 \ascon permutation rounds per-pipeline pass.
+% For brevity yet without the loss of generality, we will be using the above-mentioned configuration for the rest of the discussion.
+
+% On the computation time of \sysname, we observe the minimum latency at the 99th percentile of \XXX ${\mu}s$ and \XXX ${\mu}s$ for Tofino and Tofino2, respectively.
+% When compared to the traditional PCI-E control channel, the overhead of \sysname can be considered negligible.
+% The results are depicted in~\cref{fig:eval_latency}.
+% \newline
+% \input{figures/eval_latency_pt_len_tofino2}
+% This latency also varies with the input length and the no. of \ascon rounds/pass as shown in~\cref{fig:eval_latency_ip}.
+% \para{Effect of input length}
+
+
+% \para{Impact of input length}
+\subsection{Impact of input length}
+Next, we evaluate the effect of different input lengths\footnote{This also applies to the associated data.}.
+For brevity, we only discuss the figures for the best possible configurations, i.e., 2~\pround variant(bars in orange in \cref{fig:eval_tf1_tput_lat}) for Tofino and 4~\pround variant (the bars in red in \cref{fig:eval_tf2_tput_lat}) for Tofino2.
+% Here, we fix the length of the associated data at 4 bytes.
+Recall that for every increase in 8 bytes, one additional \perm(6) is needed (see~\cref{sec:background}).
+This translates to lower throughput.
+% which
+% required increases by $n$ time 
+From~\cref{subfig:eval_tf2_tput}, we observe that for Tofino2, the throughput reduces from ${\sim}$40 Mpps for an 8-byte input %\todo{instead of input, can we say payload or data?}\mason{let's use plaintext} 
+to ${\sim}$25 Mpps when the input is 32 bytes.
+A reverse trend is seen for the latency in~\cref{subfig:eval_tf2_lat} from $8.5 \mu$s to $12 \mu$s. 
+A similar trend is also seen for Tofino as shown in~\cref{fig:eval_tf1_tput_lat}.
+% A similar trend for throughput and latency is followed by Tofino as shown in~\cref{fig:eval_tf1_tput_lat}.
+
+% At the same time, we also vary the length of the input.
+% From~\cref{XXX}, we observe that the throughput increases linearly when more rounds can be done per-pipeline pass.
+% As the length of the payload increases, the throughput decreases given the need for additional pipeline passes to complete the computation.
+% A similar trend is also observed for latency.
+
+% \subsection{Scalability}
+% \label{subsec:scalability}
+
+
+% \para{Impact of \#recirculation ports}
+\subsection{Impact of \#recirculation ports}
+
+\input{figures/eval_scalability}
+
+Following, we demonstrate how \sysname scales to support higher throughput by increasing the number of dedicated recirculation ports (up to 8) in~\cref{fig:eval_scalability} using the 2 \pround and 4 \pround variants for Tofino and Tofino2, respectively.
+As more recirculation ports are used, the throughput increases linearly up to ${\sim}$320 Mpps for Tofino2.
+However, in the case of Tofino2, when the dedicated recirculation ports all belong to the same pipeline
+\cite{2021-TAPOPF-PIPELINES} 
+(analogous to a CPU core), the throughput tapers off at ${\sim}$146 Mpps due to the pipeline being saturated at around 1.2 Bpps~\cite{intel-tofino2-specs} with recirculated packets.
+This corresponds to the clock speed on the Tofino ASICs which is at around 1.2 GHz~\cite{hotchips30-tf,intel-tofino2-specs}.
+Note that the throughput for Tofino with 8 ports is approximately the throughout for Tofino2 with only 1 port.
+By dedicating the entire Tofino pipeline with 16 ports (not shown in~\cref{fig:eval_scalability}), the throughput saturates at ${\sim}$66 Mpps.
+% If more switching pipeline is dedicated for \sysname, 
+
+% In~\cref{fig:eval_scalability}, we demonstrate how \sysname can be scaled up to support higher throughputs by increasing the number of dedicated recirculation ports.
+% While we observe that the throughput increases linearly with the number of recirculation ports dedicated, the throughput is eventually bounded by the packet processing capacity of the switching pipeline (analogous to a CPU core) -- around 1.2 Bpps.
+% By dedicating an entire pipeline, the maximum throughput achievable is ${\sim}$66 Mpps and ${\sim}$146 Mpps on Tofino and Tofino2, respectively.
+
+% As \ascon requires multiple pipeline passes to complete the rounds, the performance is thus dependent on the number of available ports dedicated for recirculation.
+% In~\cref{XXX}, we show that the throughput increases linearly with the number of dedicated recirculation ports.
+% If a pipeline is dedicated, i.e., 16 ports on Tofino, and 8 ports on Tofino2, the achievable throughput can be up to XXX Mpps and YYY Mpps, respectively.
+% Thus, if one requires greater throughput, it can be done by simply adding more recirculation ports.
+
+\subsection{Hardware Resource Utilization}
+
+\input{tables/eval_res_util}
+% \input{tables/temp}
+
+% \paragraph{Hardware Resource Utilization}
+Finally, we illustrate the hardware resource utilization for all the configurations of \sysname on the 
+% i.e.,  2 and 4 {\pround}s per pipeline pass for
+Tofino and Tofino2, respectively in~\cref{tab:eval_res_util}.
+% We only include the resource consumption by the core logic of \sysname.
+Notably, our implementation heavily uses the hash distribution units (HDUs) for the linear diffusion layers in a \pround.
+Here, each \emph{individual} \pround consumes 27.8\% and 16.7\% of the HDUs on the Tofino and Tofino2 respectively, for the maximal configuration (i.e., \texttt{tf1\_2rnd.p4} and \texttt{tf2\_4rnd.p4}, respectively).
+As for the other H/W resources, they do not vary much except for the hash bits, which increase linearly with the number of {\pround}s.
+Depending on the resources available, a data plane developer can decide on the corresponding configuration to integrate \sysname to secure their applications.
+% \todo{update the text}
+
+
+% \section{Case-Study}
+% \label{sec:case}
+
+% \subsection{In-Network Key-Value Store}
+% \label{subsec:dyso}
+
+% % \para{Security Overview}
+% Storage, retrieval, and management of key-value objects is a crucial building block for large-scale cloud services. 
+% To this end, in-network key-value storage and caching have become a recent trend \cite{jin2017netcache,distcache2019}
+% % switchkv2016} 
+% to meet aggressive latency and throughput objectives efficiently under highly-skewed and rapidly changing workloads.
+% In particular, NetCache~\cite{jin2017netcache} maintains hot entries using programmable switches to load balance the key-value store servers.
+
+% % The new generation of programmable switches has made this possible.
+% As the workload changes rapidly in data centers, it is crucial that the \emph{stale} key entries can be replaced swiftly to minimize the miss ratio.
+% But as discussed in \cref{sec:background},
+% % with the advancements like in-network caching, 
+% the control channel providing the cache updates has become the bottleneck. 
+% To address this, DySO~\cite{2023-ComputerNetworks-DySO} leverages the in-band control channel to accelerate the cache updates.
+% But with such a setup, the cache is exposed to the potential risks where bogus cache updates are pushed to the data plane, thus causing denial-of-service. 
+% % the attack surface increases significantly, in case one of the tenant servers turns malicious it can become a serious security threat since it can modify and update multiple switch states together causing denial of services.
+
+% % \input{figures/malicious_overview}
+
+% To that end, we secure DySO with \sysname to enable authenticated in-band key-value entry updates\footnote{Since DySO reuses the control packets used in updating key-value store to report monitoring, it is enough to encrypt the control packets once in the control plane and decrypt them in the data plane.}. 
+% However, introducing \sysname may cause performance degradation to an application given the additional latency in authentication.
+% To investigate that, we evaluate the performance impact of \sysname by integrating it with the publicly available implementation~\cite{dyso-p4} of the DySO accelerated variant of NetCache~\cite{jin2017netcache}.
+
+% In \cref{fig:mal_over}, we present a high-level overview of how \sysname works to secure the updates in the presence of a malicious tenant server.
+% \archit{argument is that switches are generally difficult to be configured maliciously}
+% P4EAD works" - draw the diagram with topology - 4 servers, 2 leaf, 2 spine. 1 server is valid, 1 server is malicious. 
+
+% \archit{this is a bit repetitive}
+% Next, we emphasize how NetCache functions and how DySO further optimizes the in-network caching.
+% elaborate on how exactly an in-band control channel functions and impacts an application like NetCache.
+
+% As the workload can change rapidly in data centers, it is crucial that the \emph{stale} key entries can be replaced swiftly to minimize the miss ratio, and thus the need for in-band control channels -- DySO~\cite{2023-ComputerNetworks-DySO}. 
+% This helped further optimize the approach for in-network data plane caching was further with faster key population and updates. This is illustrated in \cref{fig:inband_comp}
+
+\input{figures/eval_setup}
+\input{figures/eval_dyso}
+
+% Next, we evaluate the performance impact of \sysname by integrating it with the publicly available implementation~\cite{dyso-p4} of a control plane accelerated variant of NetCache~\cite{jin2017netcache}.
+% NetCache maintains hot entries in the data plane to load balance the key-value store servers.
+% As the workload can change rapidly in data centers, it is crucial that the \emph{stale} key entries can be replaced swiftly to minimize the miss ratio, and thus the need for in-band control channels -- DySO~\cite{2023-ComputerNetworks-DySO}.
+
+Here, we configure \sysname with 1 \pround per pipeline pass.
+Note that this is the minimal variant with the lowest throughput and longest processing latency.
+We generate a key-value query stream with sudden workload changes, i.e., shifting $1K$ unpopular items to top-rank popularity every 5 seconds for 100 seconds.
+% 64K entries.
+The settings used are identical to the evaluation in~\cite{dyso-p4}.
+The setup is depicted in~\cref{fig:eval_setup}.
+
+From the evaluation results, we see that despite \sysname incurring additional latency, the resulting performance is still comparable with the state-of-the-art~\cite{2023-ComputerNetworks-DySO}. 
+\cref{fig:dyso_eval_cdf} demonstrates the CDF of key miss-ratio, sampled every 1\.ms, during 30\,ms after workload changes with and without \sysname.
+This showcases that \sysname with its additional authentication latency induces a very negligible performance drop. 
+
+Similarly, \cref{fig:dyso_eval_long} illustrates the time-series pattern of miss-ratio with \sysname being enabled 18 seconds after the start and reaffirms the negligible overhead of \sysname. 
+Based on the results, we observe that the in-band control channel can be authenticated using \sysname without any performance drop of the emerging application, e.g., in-network caching.
+% the in-band control channel rate is still orders of magnitude smaller than out-of-band control channels, and thus the negligible performance difference.
+
+
+
+% \todo{Archit, explain the results in Figure 10-a and b. E.g., Figure 10-a shows the CDF of miss-ratio during 30\,ms after workload changes, and it shows that P4EAD induces a negligible performance drop by its authentication latency(?).
+% Similarly, simply say what the figure is (e.g., the monitoring window is 1ms?).}
+
+%%%%%%%%%%% OLD FIGURES %%%%%%%%%%%
+% \input{figures/big_picture}
+% \input{figures/compare_inband}
+
+\subsection{AccelUPF- In-network 5G UPF acceleration}
+
+In 5G mobile networks, the user-plane function (UPF) is critical to the latency and throughput of the network. 
+Given the significantly increased number of users, frequent user session churn and updates are expected.
+However, through out-of-band control channel mechanisms, it poses a non-negligible delay in setting up/removing user sessions timely.
+
+With regards to that, AccelUPF~\cite{bose2022accelupf} proposes to (partially) accelerate the Packet Forwarding Convergence Protocol (PFCP) that is involved in the user sessions set up in the UPF through the use of in-band control channels.
+Unfortunately, since the source code is not public we are unable to evaluate {\sysname}'s performance alongside AccelUPF.
+
+To address that, we leverage the available benchmark figures in AccelUPF (see Table 1 of~\cite{bose2022accelupf}), to project the potential impact of \sysname on AccelUPF.
+Based on the presented figures, for 1k user sessions, the average latency (or RTT) for a PFCP packet on an Intel Tofino switch running AccelUPF was 35$\mu$s.
+If we compare the performance of \sysname running alongside, given the worst case latency of \sysname is around $72 \mu$s ($2 \times 36$) for the longest input length, 
+% , i.e. , 
+the forwarding latency would still be $(35 + 72)=107\mu$s.
+This is still four times better as compared to the latency of prior approaches (e.g., GTPOffload) running on Tofino (447$\mu$s).
+Thus, we expect AccelUPF to still be highly performant with \sysname.
+
+% Frequency user sessions churn, e.g., in IoT-dominated settings, can lead to  
+% \todo{add the latency numbers and figures here}. 
+% As per the benchmarks available in AccelUPF~\cite{bose2022accelupf}, for 1k user sessions, the average forwarding latency(or RTT) for a PFCP packet on a Tofino switch running AccelUPF was 35$\mu$s. 
+% In theory, if we compare the performance of \sysname running alongside, given the worst case latency of \sysname is roughly around 2*36 i.e. 72$\mu$s, the forwarding latency would still be (35 + 72)$\mu$s i.e. around 107$\mu$s.
+% This is still much lesser as compared to the latency of GTPOffload running on Tofino(447$\mu$s) and comparable to the latency with software UPF(~40$\mu$s) with much higher throughput. 
+% \input{tables/accel_upf}
+
+% This demonstrates that securing the in-band control channel comes with little performance impact given that 
+% This 
+% is possible.
+% Despite that \sysname incurs additional latency for authenticated control actions, such a latency overhead is on par with the state-of-the-art reactive out-of-band system~\cite{yu2020mantis} or in-band control framework~\cite{2023-ComputerNetworks-DySO} on programmable switches.
+
+% Consequently, \sysname would have only a negligible impact on system performance.
+
+
+% Here, we demonstrate this by integrating \sysname with the recent control-plane acceleration framework (DySO~\cite{dyso-p4}) of in-network KV store~\cite{jin2017netcache}.
+% The in-band control channel is used to replace the \textit{stale} key entries cache in the data plane with \textit{hot/active} ones  swiftly to minimize the cache-miss ratio, when there are workload changes detected.
+% \cref{fig:dyso_eval_setup} depicts the evaluation setup.
+% For the worst-case study, we configure \sysname with 1 \pround per pipeline pass.
+% We generate a key-value query stream with sudden workload changes, i.e., shifting unpopular items to top-rank popularity every 5 seconds for 100 seconds.
+% The settings used are identical to the evaluation in~\cite{dyso-p4}.
+
+
+
+% %%%%%%%% SHORT (ORIGINAL) VERSION %%%%%%%%
+% We integrate \sysname with the implementation~\cite{dyso-p4} of the control-plane accelerated~\cite{2023-ComputerNetworks-DySO} in-network KV store, NetCache~\cite{jin2017netcache}, to secure the in-band control channel.
+% Here, the in-band control channel is used to replace the key entries cache in the data plane swiftly when there are workload changes detected to minimize the cache-miss ratio.
+% % \todo{give a 1-2 sentence overview of what is DySO and that it utilizes in-band signaling to reduce cache hit miss ratio...}
+% \cref{fig:dyso_eval_setup} depicts the evaluation setup.
+% \sysname is configured with 1 \pround per pipeline pass.
+% We generate a key-value query stream with sudden workload changes, i.e., shifting unpopular items to top-rank popularity every 5 seconds for 100 seconds.
+% The settings used are identical to the evaluation in~\cite{dyso-p4}.
+% %%%%%%%% FINISHED %%%%%%%%
+
+
+
+% From the results in~\cref{fig:dyso_eval_cdf} and~\cref{fig:dyso_eval_long}, we observe a minimal difference in terms of the DySO's miss ratio with and without using \sysname.
+% This demonstrates that securing the in-band control channel with little performance impact is possible.
+
+%  packets of a control-plane accelerated~\cite{2023-ComputerNetworks-DySO} in-network key-value store~\cite{jin2017netcache}.
+
+% , ,  and study the performance impact, if any. 
+
+% As illustrated in~\cref{sec:eval}, \sysname incurs a non-negligible overhead in terms of the end-to-end latency.
+% We integrate \sysname with a control-plane accelerated~\cite{2023-ComputerNetworks-DySO} version of an in-network key value store~\cite{jin2017netcache} to secure the in-band control packets and study the performance impact, if any.
+% \sysname is configured using two permutation rounds, and the plaintext length is set at 32 bytes which carries four key-value entries.
+
+% We depict the results in~\cref{fig:dyso_eval_cdf} and~\cref{fig:dyso_eval_long}.
+% With \sysname, we notice minimal differences in terms of performance for the case without \sysname.
+% \todo{elaborate. Why? negligible latency increase in original in-band control loop? }
+

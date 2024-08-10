@@ -1,0 +1,66 @@
+\begin{algorithm} [t!]
+\caption{
+    \texttt{\sysname pipeline flow}, 
+    % \textit{Input:} 
+    %     packet \textsf{pkt},
+    %     current state \textsf{curr\_state},
+    %     current round number \textsf{curr\_rd},
+    %     operation mode \textsf{op\_mode},
+    % \textit{Output:} 
+    %     enncrypted/decrypted pkt \textsf{pkt'} 
+}
+    \begin{algorithmic} [1]
+        \Procedure{p4ead\_pipeline}{\textsf{pkt}, \textsf{curr\_state}, \textsf{curr\_rd}, \textsf{op\_mode}}
+            \State prnd\_count $\gets$ 0
+            \While{\textsf{prnd\_count} $<$ \textsf{RPP}} \label{algline:rpp}
+                \If{curr\_state == START}
+                    \State curr\_state $\gets$ INIT
+                    \State \textsf{pkt} $\gets$ \Call{INIT}{\textsf{pkt}}
+                \ElsIf{curr\_state == INIT}
+                    \If{curr\_rd == 12}
+                        \State curr\_state $\gets$ ABS\_AD
+                        \State \textsf{pkt} $\gets$ \Call{AD\_ABS}{\textsf{pkt}}
+                        \State curr\_rd $\gets$ 0
+                    \EndIf
+                \ElsIf{curr\_state == ABS\_AD}
+                    \If{curr\_rd == 6}
+                        \State curr\_state $\gets$ ABS\_IP
+                        \State \textsf{pkt} $\gets$ \Call{IP\_ABS}{\textsf{pkt}}
+                        \State curr\_rd $\gets$ 0
+                    \EndIf
+                \ElsIf{curr\_state == ABS\_IP}
+                    \If{curr\_rd == 6}
+                        \State curr\_state $\gets$ FINAL
+                        \State curr\_rd $\gets$ 0
+                    \EndIf
+                \ElsIf{curr\_state == FINAL}
+                    \If{curr\_rd == 12}
+                        \State curr\_state $\gets$ END
+                        \State \textsf{pkt} $\gets$ \Call{TAG}{\textsf{pkt}}
+                        \State \Call{break}{}   
+                    \EndIf
+                \EndIf
+                \State \textsf{pkt} $\gets$ \Call{p\_rnd}{\textsf{pkt}}  \Comment{do one P-RND}
+                \State prnd\_count $\gets$ prnd\_count $+ 1$
+                \State curr\_rd $\gets$ curr\_rd $+ 1$
+            \EndWhile
+            \If{curr\_state == END}
+                \If{op\_mode == DECRYPT}
+                    \State valid\_tag $\gets$ \Call{verify\_tag}{\textsf{pkt}}
+                    \If{$\neg$valid\_tag}
+                        \State \Call{drop}{\textsf{pkt}}
+                    \EndIf
+                \EndIf
+                \State \textsf{pkt'} $\gets$ \textsf{pkt}
+                \State \Call{forward}{\textsf{pkt'}}
+            \Else
+                \State \Call{recirculate}{\textsf{pkt}} 
+            \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \label{alg:pipeline}
+\end{algorithm}
+
+ % \If {(cCount - \textsf{cms}.get\_count(flowId)) > $\sigma$} \label{algorithm_access_check_count_start}
+ %                \State \textsf{pkt}.ctrl $\gets 0$ \COMMENT{prepare alert}
+ %                \State \textsf{pkt}.dst\_ip $\gets$ \Call {Get\_Border\_IP}{\textsf{pkt}.ctrl.borderId}\label{algorithm_access_check_count_end}

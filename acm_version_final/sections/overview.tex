@@ -1,0 +1,16 @@
+\section{Energy-Saving rApp Overview}
+\label{sec:overview}
+
+\textcolor{blue}{Good overall overview of how the rApp works is required here}. 
+O-RAN defines rApps [O-RAN Alliance, "O-RAN Architecture Description," O-RAN.WG1.O-RAN-Architecture-Description-v03.00, July 2020.] as modular applications designed to consume and/or produces non real time management and automation services for the orchestration and optimization of network resources and operations. The non-RT RIC, in particular, is designed to handle tasks that do not require immediate response. This makes it ideal for applications focused on long-term optimization and strategic planning, such as energy control. The rApp is a data-driven application that uses machine learning algorithms to predict traffic patterns and optimize energy consumption in the RAN. The rApp receives input data from the Radio Database, Traffic Predictor, and Coverage Predictor, and sends a policy to the Near-RT RIC over what to do. The decision is made periodically, with a 1-hour prediction window and 15-minute slots. The rApp is designed to be shared across multiple rApps and can import data from RF link simulators and drive tests through an external interface. A Dashboard for visualization of the Radio Mapping Database is also used. \\
+
+The rApp is data driven in the sense that it does not incorporate a rules-based logic but determines the rules which meet the target objective based on the input data and network configuration. A Dashboard for visualization of the Radio Mapping Database is also used. \\
+- What is the output of the algorithm? Does it send a reccomendation to the Near-RT RIC over what to do? - sends a policy, sent as a declarative statement. sent across A1 interface. \\
+
+- \textcolor{blue}{Why rApp over an xApp? How does this link to the TS xApp? (receive a policy from the rApp)}  \\
+
+Space-time partitioning: This is a technique used to divide data based on both spatial (location) and temporal (time) dimensions. In the context of the rApp, this could involve organizing Key Performance Indicators (KPIs) by specific geographical areas (cells, sectors, etc.) and time periods to better manage and analyze the data.
+
+Continuous time-based aggregation: This refers to the process of continuously collecting and summarizing data over time. Instead of analyzing data at discrete intervals, it is aggregated in a continuous manner, which allows for more fluid and accurate monitoring of KPIs.
+
+Group KPIs by time: This involves organizing the Key Performance Indicators (KPIs) into groups based on the time they were recorded. This helps in analyzing trends and patterns over specific time periods.

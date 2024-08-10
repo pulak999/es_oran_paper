@@ -1,0 +1,32 @@
+\clearpage
+\appendix
+\newpage
+
+\section{rApp Workflow}
+\label{appendix:main_algo}
+% \noindent\textbf{\Large{Note: Appendices are supporting material that has not been peer-reviewed.}}
+
+We outline $\sysname$'s pipeline flow in~\cref{alg:pipeline}. 
+\cref{alg:pipeline} takes four inputs, i.e., \textsf{pkt}, \textsf{curr\_state}, \textsf{curr\_rd} and \textsf{op\_mode}.
+Here, the current state (\textsf{curr\_state}) can either be any of the following states: START, INIT, ABS\_AD, ABS\_IP, FINAL, and END.
+Similarly, the operation mode (\textsf{op\_mode}) can be ENCRYPT or DECRYPT.
+In line~\ref{algline:rpp}, \texttt{RPP} denotes the number of \pround per pipeline pass configuration of \sysname, which can be 1 or 2 for Tofino and among 1,2,3, or 4 for Tofino2.
+For brevity, we assume that the AD and input absorption happens only once, i.e., the packet having a short AD and input, in~\cref{alg:pipeline}. As larger input/ AD sizes, the absorption happens sequentially in chunks of 8 bytes.
+% We have ingress packets undergoing encryption at different states of \ascon, being processed together.
+% A packet can be \textit{(i)} newly received that needs to be encrypted,\textit{(ii)} recirculate and in the middle of an \ascon state(like INIT, ABS\_AD) or \textit{(iii)} recirculated and at the end of an \ascon state.
+
+When a packet is newly received, it is at the state START, and depending on the packet type,
+% \todo{ and other header info}
+the \textsf{op\_mode} is set.
+The recirculated packets which are in the middle of processing will have \textsf{curr\_state} set to other than START.
+We keep track of the current \pround using \textsf{prnd\_count} and the current \ascon state using \textsf{curr\_state}.
+A newly received packet's flow starts from the START state and moves onto INIT, which after \perm{(12)} moves onto AD absorption, and so on (as depicted in the flow in~\cref{fig:bg_aead_flow}).
+The \textsf{curr\_rd} parameter keeps track of the \pround number for \perm{(12)} or \perm{(6)}. 
+
+Finally, once the packet payload is absorbed and the tags are finalized, the END state is reached.
+If the \textsf{op\_mode} is DECRYPT, then a tag verification happens before forwarding or proceeding with further packet processing logic with the final processed packet, \textsf{pkt'}.
+
+\input{tables/pipeline}
+
+\section{Cell Bringup}
+
