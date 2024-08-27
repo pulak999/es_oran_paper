@@ -1,0 +1,77 @@
+\definecolor{mygrey}{RGB}{145,146,156}
+\definecolor{mypurple}{RGB}{153,102,204}
+\definecolor{myotherblue}{RGB}{0,191,255}
+\definecolor{mygreen}{RGB}{144,238,144}
+\definecolor{myyellow}{RGB}{255,215,0}
+\definecolor{myorange}{RGB}{255,165,0}
+\definecolor{myothergreen}{RGB}{35,79,30}
+\definecolor{myred}{RGB}{255,127,80}
+\definecolor{myindigo}{RGB}{100,110,230}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[
+        subox1/.style={draw, fill=myorange, minimum width=0.7cm, minimum height=0.7cm, font=\footnotesize},
+        subox2/.style={draw, fill=myindigo, minimum width=0.55cm, minimum height=0.7cm, font=\footnotesize},
+        subox3/.style={draw, fill=myred, minimum width=0.55cm, minimum height=0.7cm, font=\footnotesize},
+        subox4/.style={draw, fill=myothergreen, minimum width=2.4cm, minimum height=0.4cm, font=\footnotesize},
+        box1/.style={draw, fill=mygreen, minimum width=2.6cm, minimum height=1.5cm, font=\footnotesize},
+        box2/.style={draw, fill=myyellow, minimum width=1.7cm, minimum height=1.5cm, font=\footnotesize},
+        smallbox1/.style={draw, fill=mypurple, minimum width=0.85cm, minimum height=0.5cm, font=\footnotesize, rounded corners},
+        smallbox2/.style={draw, fill=myotherblue, minimum width=0.85cm, minimum height=0.5cm, font=\footnotesize, rounded corners},
+        smallbox3/.style={draw, fill=mygrey, minimum width=0.85cm, minimum height=0.5cm, font=\footnotesize, rounded corners},
+        flatbox1/.style={draw, fill=myotherblue, minimum width=2cm, minimum height=0.25cm, font=\footnotesize},
+        flatbox2/.style={draw, fill=myotherblue, minimum width=3cm, minimum height=0.25cm, font=\footnotesize},
+        flatbox3/.style={draw, fill=mygrey, minimum width=3cm, minimum height=0.35cm, font=\footnotesize},
+        bigbox1/.style={draw, fill=myotherblue, minimum width=0.8cm, minimum height=0.7cm, font=\footnotesize},
+        bigbox2/.style={draw, fill=mygrey, minimum width=0.9cm, minimum height=0.7cm, font=\footnotesize},
+        bigbox3/.style={draw, fill=mygrey, minimum width=4.45cm, minimum height=0.4cm, font=\footnotesize},
+        hugebox/.style={draw, , fill=mygrey, minimum width=9cm, minimum height=0.75cm, font=\footnotesize},
+        scale=0.55 % Adjust this value to fit in one or two columns
+    ]
+    
+    % Base layer
+    \node[hugebox, text=white] (ns3) {\textbf{\texttt{ns-3 (network simulator)}}};
+
+    % Second layer
+    \node[smallbox1, text=white, above left=0.2 and -1.5 of ns3] (sdnr) {\texttt{SDNR}};
+    \node[flatbox1, text=white, above left=0.2 and -4.5 of ns3] (o1) {\texttt{O1-adapter}};
+    \node[flatbox2, text=white, above right=0.2 and -3 of ns3] (e2) {\texttt{E2-adapter, USOI}};
+    \node[flatbox3, text=white, above right=0.75 and -3 of ns3] (near-ric) {\textbf{\texttt{Near-RT RIC}}};
+    
+    % Third layer
+    \node[bigbox1, text=white, above right=1.25 and -0.85 of ns3, align=center] (other-x) {\texttt{other} \\ \texttt{xApps}};
+    \node[bigbox2, text=white, above right=1.25 and -2.025 of ns3, align=center] (kpi-x) {\textbf{\texttt{KPI-MON}} \\ \textbf{\texttt{xApp}}};
+    \node[bigbox2, text=white, above right=1.25 and -3 of ns3, align=center] (ts-x) {\textbf{\texttt{TS}} \\ \textbf{\texttt{xApp}}};
+    
+    \node[bigbox3, text=white, above left=0.85 and -4.5 of ns3, align=center] (smo) {\textbf{\texttt{SMO}}};
+    \node[bigbox3, text=white, above left=1.4 and -4.5 of ns3, align=center] (non-ric) {\textbf{\texttt{Non-RT RIC}}};
+
+    % Fourth layer
+    \node[box1, above left=0.15 and -2.6 of non-ric] (es) {};
+    \node[box2, text=white, above left=0.15 and -4.45 of non-ric, align=center] (rapps) {\texttt{other} \\ \texttt{rApps}};
+    
+    % Super-Impose layer
+    \node[subox1, text=white, above left=0.3 and -1.2 of non-ric, align=center] (dt) {\textbf{\texttt{Digital}} \\ \textbf{\texttt{Twin}}};
+    \node[subox2, text=white, above left=0.3 and -1.85 of non-ric, align=center] (cp) {\textbf{\texttt{CP}}};
+    \node[subox3, text=white, above left=0.3 and -2.5 of non-ric, align=center] (tp) {\textbf{\texttt{TP}}};
+    \node[subox4, text=white, above left=1.1 and -2.5 of non-ric, align=center] (dme) {\textbf{\texttt{DME}}};
+    \node[smallbox1, text=white, above left=0.55 and -3.9 of ns3, align=center] (ves) {\texttt{VES} \\ \texttt{clctr}};
+    
+    % Arrows
+
+    %\draw[-, line width=0.5mm] (sdnr.south) -- (ns3.north -| sdnr.south);
+    %\draw[-, line width=0.5mm] (o1.south) -- (ns3.north -| o1.south);
+    %\draw[-, line width=0.5mm] (e2.south) -- (ns3.north -| e2.south);
+    %\draw[-, line width=0.5mm] (near-ric.south) -- (e2.north -| near-ric.south);
+    %\draw[->, line width=0.5mm] (non-ric.south) -- (e2.north -| non-ric.south);
+    
+    % Text
+    %\node[rotate=90, red, anchor=south, font=\tiny] at ($(es.west)+(-0.4,0)$) {Cell ON/OFF};
+    \node[above=0.01 of es] {\small \textbf{\texttt{ES rApp}}};
+
+    \end{tikzpicture}
+    \caption{System Architecture Diagram}
+    \label{fig:system-architecture}
+\end{figure}
+    

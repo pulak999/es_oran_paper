@@ -1,0 +1,21 @@
+\begin{table*}[ht]
+\caption{Performance of Different Models on Various Synthetic Datasets}
+\centering
+\resizebox{\textwidth}{!}{%
+    \begin{tabular}{|*{3}{>{\centering\arraybackslash}p{0.33\textwidth}|}}
+    \hline
+    \textbf{Dataset Type} & \textbf{Prophet Performance} & \textbf{LSTM Performance} \\
+    \hline
+    No Trend, No Seasonality & Does not trend correctly, trends in the opposite direction & Follows trend but does not account for the noise well \\
+    \hline
+    Upwards Trend, No Seasonality & Steadily trends upwards but not according to the data (underfits) & Follows trend but predicts widely off values when accounting for noise \\
+    \hline
+    Downwards Trend, No Seasonality & Trends appropriately but underfits, does not recognize dataset intricacies & Recognizes trend and seasonality but produces very inaccurate values due to noise \\
+    \hline
+    Upwards Trend, With Seasonality & Recognizes trend but not seasonality & Recognizes trend and seasonality well, performs satisfactorily with test data \\
+    \hline
+    Downwards Trend, With Seasonality & Recognizes trend but not seasonality & Recognizes trend and seasonality but produces very inaccurate values due to noise \\
+    \hline
+    \end{tabular}%
+}
+\end{table*}

@@ -1,12 +1,11 @@
 \begin{abstract}
 
-Energy consumption is one of the most pressing challenges in the use of radio access networks (RANs), making it a critical area for research. Recent studies show that RANs contribute significantly to the total energy usage of mobile networks. The Open Radio Access Network (O-RAN) architecture, particularly with the use of xApps and rApps interfaced with RAN Intelligent Controllers (RIC), offers promising solutions for effective energy management in RANs. %Designed to be more flexible and scalable than traditional RANs, the O-RAN architecture enables more efficient utilization of network resources.
+    Mobile communication technologies, in their quest to deliver the highest possible data rates over the air interface, have nearly touched the Shannon limit \textcolor{blue}{[CITE]}. 
+    %\begin{comment}[\textcolor{blue}{CITE}]\end{comment}. 
+    This has been made possible through the implementation of Multi-user MIMO, beamforming, and the utilization of large bandwidths in the C-band and millimeter-wave spectrum \textcolor{blue}{[CITE]}.
+    Despite the advancements in techniques to enhance service capabilities, the power usage by the radio and compute components at the base stations (known as eNodeB in LTE and gNodeB in NR) frequently constitutes a significant part of the operational costs (OPEX) for operators, a factor that is commonly disregarded.
+    This paper delves into one of the most straightforward strategies for energy conservation in cellular networks: deactivating under-utilized cells.
+    Although this technique has been extensively researched, we introduce a \textcolor{red}{novel} validation framework for evaluating its effectiveness and ensuring the Quality of Service (QoS) is maintained for end users.
+    Our simulations, conducted over a rApp setup, demonstrate the effectiveness of the proposed technique, resulting in a significant reduction of \textcolor{red}{[VALS]} in power consumption.
     
-In this work, we have developed a platform-agnostic Energy-Saving (ES) rApp which will interface with any O-RAN compliant networks. The rApp comprises multiple components, including a simple LSTM model for predicting the network's short-term energy needs, and a separate decision-making entity that decides which cells to switch off to save energy. %The model is trained on historical network data and uses this data to forecast future energy trends.
-\textcolor{red}{[PULAK] more infomation of our testing environment}
-The obtained simulation results demonstrate the energy efficiency and performance approach of the proposed control in terms of a \textcolor{red}{[PULAK] After results.}\% reduction in power consumed as well as \textcolor{red}{an increase in coverage [PULAK] After results.}. 
-This improvement is achieved without affecting the overall throughput and CQI of the connected UEs.
-
-
-
 \end{abstract}

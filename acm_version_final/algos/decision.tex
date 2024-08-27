@@ -1,226 +1,34 @@
 \begin{algorithm} [t!]
     \caption{
-        \texttt{\sysname pipeline flow}, 
-        % \textit{Input:} 
-        %     packet \textsf{pkt},
-        %     current state \textsf{curr\_state},
-        %     current round number \textsf{curr\_rd},
-        %     operation mode \textsf{op\_mode},
-        % \textit{Output:} 
-        %     enncrypted/decrypted pkt \textsf{pkt'} 
+        \texttt{Energy Saving Entity Algorithm},
     }
-        \begin{algorithmic} [1]
-            \Procedure{p4ead\_pipeline}{\textsf{pkt}, \textsf{curr\_state}, \textsf{curr\_rd}, \textsf{op\_mode}}
-                \State prnd\_count $\gets$ 0
-                \While{\textsf{prnd\_count} $<$ \textsf{RPP}} \label{algline:rpp}
-                    \If{curr\_state == START}
-                        \State curr\_state $\gets$ INIT
-                        \State \textsf{pkt} $\gets$ \Call{INIT}{\textsf{pkt}}
-                    \ElsIf{curr\_state == INIT}
-                        \If{curr\_rd == 12}
-                            \State curr\_state $\gets$ ABS\_AD
-                            \State \textsf{pkt} $\gets$ \Call{AD\_ABS}{\textsf{pkt}}
-                            \State curr\_rd $\gets$ 0
-                        \EndIf
-                    \ElsIf{curr\_state == ABS\_AD}
-                        \If{curr\_rd == 6}
-                            \State curr\_state $\gets$ ABS\_IP
-                            \State \textsf{pkt} $\gets$ \Call{IP\_ABS}{\textsf{pkt}}
-                            \State curr\_rd $\gets$ 0
-                        \EndIf
-                    \ElsIf{curr\_state == ABS\_IP}
-                        \If{curr\_rd == 6}
-                            \State curr\_state $\gets$ FINAL
-                            \State curr\_rd $\gets$ 0
-                        \EndIf
-                    \ElsIf{curr\_state == FINAL}
-                        \If{curr\_rd == 12}
-                            \State curr\_state $\gets$ END
-                            \State \textsf{pkt} $\gets$ \Call{TAG}{\textsf{pkt}}
-                            \State \Call{break}{}   
-                        \EndIf
-                    \EndIf
-                    \State \textsf{pkt} $\gets$ \Call{p\_rnd}{\textsf{pkt}}  \Comment{do one P-RND}
-                    \State prnd\_count $\gets$ prnd\_count $+ 1$
-                    \State curr\_rd $\gets$ curr\_rd $+ 1$
-                \EndWhile
-                \If{curr\_state == END}
-                    \If{op\_mode == DECRYPT}
-                        \State valid\_tag $\gets$ \Call{verify\_tag}{\textsf{pkt}}
-                        \If{$\neg$valid\_tag}
-                            \State \Call{drop}{\textsf{pkt}}
-                        \EndIf
-                    \EndIf
-                    \State \textsf{pkt'} $\gets$ \textsf{pkt}
-                    \State \Call{forward}{\textsf{pkt'}}
+    \begin{algorithmic} [1]
+        \Procedure{EnergySavingEntity}{\textsf{$\tau$, curr\_tpt, cqi\_curr, $\alpha_{th}$}}
+            \State $\textsf{tpt\_pred} \gets \textsf{TrafficPredictor(curr\_tpt)}$
+            \If{$\textsf{tpt\_pred} > \tau$}
+                \State \# Cell shutdown procedure
+                \State $\textsf{c\_map} \gets \textsf{CoveragePredictor()}$
+                \State $\textsf{node} \gets \max(\textsf{c\_map})$ \Comment{Node with maximum $E_{ij}$ for given sector}
+                \State Create \textsf{policy} for shutdown.
+                \State $\textsf{policy} \gets \textsf{node}$
+                \State $\textsf{cqi\_future} \gets \textsf{DigitalTwin(policy)}$
+                \State $\alpha \gets \textsf{KL-Divergence}(\textsf{cqi\_future}, \textsf{cqi\_curr})$
+                \If{$\alpha < \alpha_{th}$}
+                    \State Transmit \textsf{policy}.
                 \Else
-                    \State \Call{recirculate}{\textsf{pkt}} 
+                    \State Reinvoke \textsf{EnergySavingEntity($\tau$, curr\_tpt, cqi\_curr, $\alpha_{th}$)}.
                 \EndIf
-            \EndProcedure
-        \end{algorithmic}
-        \label{alg:pipeline}
-    \end{algorithm}
-    
-     % \If {(cCount - \textsf{cms}.get\_count(flowId)) > $\sigma$} \label{algorithm_access_check_count_start}
-     %                \State \textsf{pkt}.ctrl $\gets 0$ \COMMENT{prepare alert}
-     %                \State \textsf{pkt}.dst\_ip $\gets$ \Call {Get\_Border\_IP}{\textsf{pkt}.ctrl.borderId}\label{algorithm_access_check_count_end}
-
-     \begin{comment}
-        \begin{algorithm} [H]
-        \caption{Coverage Predictor}
-        \label{alg:control_application}
-        \SetKwInOut{Input}{Input}
-        \SetKwInOut{Output}{Output}
-        
-        \Input{DecisionVariables}
-        
-        \SetKwProg{Fn}{Function \emph{applyControl}}{}{end}
-        \Fn{}{
-            delay $\gets$ EWMA(delay, delay_in)\;
-            
-            \While{True}
-            {
-                \If{$condition1$}
-                {
-                    \Return{$CellBringup$}\;
-                }
-                \ElseIf{$condition2$}
-                {
-                    \Return{$CellShutdown$}\;
-                }
-                \Else
-                {
-                    $NoChange$\;
-                }
-            }
-        }
-        
-        \Output{$Control\_Action$} % Adjust the output based on your actual output
-        
-        \end{algorithm}
-        \end{comment}
-
-
-        \begin{comment}
-            \begin{algorithm} [H]
-            \caption{Control Application to the RAN Stack}
-            \label{alg:control_application}
-            \SetKwInOut{Input}{Input}
-            \SetKwInOut{Output}{Output}
-            
-            \Input{DecisionVariables}
-            
-            \SetKwProg{Fn}{Function \emph{applyControl}}{}{end}
-            \Fn{}{
-                delay $\gets$ EWMA(delay, delay_in)\;
-                
-                \While{True}
-                {
-                    \If{$condition1$}
-                    {
-                        \Return{$CellBringup$}\;
-                    }
-                    \ElseIf{$condition2$}
-                    {
-                        \Return{$CellShutdown$}\;
-                    }
-                    \Else
-                    {
-                        $NoChange$\;
-                    }
-                }
-            }
-            
-            \Output{$Control\_Action$} % Adjust the output based on your actual output
-            
-            \end{algorithm}
-            
-            \begin{algorithm}[H]
-            \caption{Cell Shutdown Procedure}
-            \label{alg:cellshut}
-            \SetKwProg{generate}{Function \emph{CellShutdown}}{}{end}
-            
-            Map store=new Map(obj, queue)\;
-            \generate{Object pivot}{
-                 \ForAll{child $c$ in pivot}{
-                 \If{ $c$'s FieldContext is not set and $c$ is fusible}{
-                      generate($c$)\;
-                  }
-                 }
-                 build pivot's fieldContext $fc$\;
-                 EmitClassName\;
-                 EmitFields($fc$)\;
-                 EmitMethods($fc$)\;
-            }
-            \end{algorithm}
-            
-            \begin{algorithm}
-            \caption{Cell Shutdown Procedure}
-            \SetAlgoLined
-            \KwData{Lat-long of all the transmitters (antenna characteristics, antenna height, etc.)}
-            \KwData{Field strength at any point from all the transmitters (using CloudRF)}
-            \KwData{Entire geography subdivided into smaller areas (30m x 30m) each represented by a pixel obtained from CloudRF map}
-            \For{each pixel}{
-                Find the RX power from each BS (more than a certain threshold)\;
-                Find the strongest BS\;
-                Calculate SINR = $\frac{\text{power of strongest cell}}{\text{sum of all remaining cells' power + noise power}}$\;
-            }
-            \For{each BS}{
-                Find the list of neighbors\;
-                Find the count of pixels where:\;
-                \quad I. Serving BS is dominant\;
-                \quad II. Neighbor is within a threshold of the serving cell\;
-                This count is degree of overlap $C_{ij}$\;
-                Total overlap is $C_{ij} + C_{ji}$\;
-                Weight of each edge of the undirected graph is the degree of overlap\;
-                Calculate the rank $M_i = \frac{K \cdot \sum \text{degree of the node}}{\text{Traffic volume at node (i)}}$ (let $K=1$ for now)\;
-            }
-            Sort the list of BS in order of descending rank; the top one is the candidate for shutdown\;
-            Select the top candidate in rank list above for shutdown\;
-            With this candidate being shutdown (power = 0), find the SINR distribution (in digital twin)\;
-            \If{the SINR distribution is within bounds}{
-                Break the loop\;
-            }
-            \Else{
-                Continue to step 1\;
-            }
-            \end{algorithm}
-            
-            \begin{algorithm}
-            \caption{Cell Bringup Procedure}
-            \SetAlgoLined
-            \KwData{For each cell we have desired pattern for CQI distribution for each traffic pattern and time of day}
-            \For{each cell}{
-                Measure the distance between CQI distributions observed and desired\;
-                \If{the observed is off by a certain threshold}{
-                    Turn the cell ON\;
-                    Recalculate the predicted CQI distribution\;
-                    \If{the distribution improves}{
-                        Keep the cell ON\;
-                    }
-                    \Else{
-                        Leave the cell OFF\;
-                    }
-                }
-            }
-            \end{algorithm}
-            
-            \begin{algorithm}
-                \SetKwInOut{Input}{Input}
-                \SetKwInOut{Output}{Output}
-            
-                \underline{function CellBringup} $()$\;
-                \Input{Two nonnegative integers $a$ and $b$}
-                \Output{$\gcd(a,b)$}
-                \eIf{$b=0$}
-                  {
-                    return $a$\;
-                  }
-                  {
-                    return Euclid$(b,a\mod b)$\;
-                  }
-                \caption{Algorithm}
-            \end{algorithm}
-            \end{comment}
-            
-        
+            \Else
+                \State \# Cell bring-up procedure
+                \ForAll{\textsf{nodes} switched off in the system}
+                    \State Create \textsf{policy} to switch on node $n$.
+                    \State $\textsf{cqi\_n} \gets \textsf{DigitalTwin(policy)}$
+                    \State $\alpha_{n} \gets \textsf{KL-Divergence}(\textsf{cqi\_n}, \textsf{cqi\_curr})$
+                \EndFor
+                \State Select \textsf{finalPolicy} with $\min \left(\textsf{mod}(\alpha_{n} - \alpha_{th})\right)$.
+                \State Transmit \textsf{finalPolicy}.
+            \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \label{alg:energy_saving_algo}
+\end{algorithm}
