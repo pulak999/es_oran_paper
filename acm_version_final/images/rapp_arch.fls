@@ -1,6 +1,0 @@
-PWD /Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images
-INPUT /usr/local/texlive/2023/texmf.cnf
-INPUT /usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf
-INPUT /usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images/rapp_arch.tex
-OUTPUT rapp_arch.log

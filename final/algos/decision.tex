@@ -1,0 +1,32 @@
+\begin{algorithm} [t!]
+    \caption{
+        \texttt{Energy Saving Procedure},
+    }
+    \begin{algorithmic} [1]
+        \Procedure{EnergySavingEntity}{\textsf{$\tau$, curr\_tpt, cqi\_curr, $\alpha_{th}$}}
+            \State $\textsf{tpt\_pred} \gets \textsf{TrafficPredictor(curr\_tpt)}$
+            \If{$\textsf{tpt\_pred} > \tau$}
+                \State $\textsf{c\_map} \gets \textsf{CoveragePredictor()}$
+                \State $\textsf{node} \gets \max(\textsf{c\_map})$ \Comment{Node with maximum $E_{ij}$ for given sector}
+                \State Create \textsf{policy} for Shutdown.
+                \State $\textsf{policy} \gets \textsf{node}$
+                \State $\textsf{cqi\_future} \gets \textsf{DigitalTwin(policy)}$
+                \State $\alpha \gets \textsf{KL-Divergence}(\textsf{cqi\_future}, \textsf{cqi\_curr})$
+                \If{$\alpha < \alpha_{th}$}
+                    \State Transmit \textsf{Policy}.
+                \Else
+                    \State Reinvoke \textsf{EnergySavingEntity($\tau$, curr\_tpt, cqi\_curr, $\alpha_{th}$)}.
+                \EndIf
+            \Else
+                \ForAll{\textsf{nodes} switched off in the system}
+                    \State Create \textsf{Policy} to Bringup node $n$.
+                    \State $\textsf{cqi\_n} \gets \textsf{DigitalTwin(policy)}$
+                    \State $\alpha_{n} \gets \textsf{KL-Divergence}(\textsf{cqi\_n}, \textsf{cqi\_curr})$
+                \EndFor
+                \State Select \textsf{finalPolicy} with $\min \left(\textsf{mod}(\alpha_{n} - \alpha_{th})\right)$.
+                \State Transmit \textsf{finalPolicy}.
+            \EndIf
+        \EndProcedure
+    \end{algorithmic}
+    \label{alg:energy_saving_algo}
+\end{algorithm}

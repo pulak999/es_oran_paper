@@ -1,0 +1,32 @@
+\section{Problem Statement}
+\label{sec:ps}
+
+In case of dense urban deployments, where the greatest number of sites are commissioned, each coverage sector has multiple carriers deployed. 
+This is done for several reasons, mainly to improve the capacity at the site or even to take advantage of different characteristics of different carriers (low-band for coverage, mid-band or high-band for capacity improvements). 
+Additionally, coverage overlap is provided across the sites to improve call drop and handover failures. 
+While complex techniques are used to balance the users and traffic across these carriers locally at the site, the aggregate traffic carried by a regional network is lesser than the total capacity of a properly planned network even during high load situations. 
+During off-traffic hours, these networks tend to be further underutilized. The energy $E$ consumed by each node is modeled as a sum of two parts, the baseline energy consumption and the energy consumed due to traffic:
+
+\begin{equation}
+    E_{\text{total}} = E_{\text{quiescent}} + \gamma N_{\text{traffic}}
+\end{equation}
+
+Here $E_{\text{quiescent}}$ represents the energy consumed by the system when it's in a quiescent or idle state. 
+This is the baseline energy consumption that occurs regardless of the level of traffic and it depends on the operating point of the radio and server.
+$\gamma$ represents the additional energy consumed per unit of traffic, represented as $N_{\text{traffic}}$.
+
+In order to minimize the effects of distortion due to high Peak to Average Power Ratio (PAPR) of orthogonal frequency division access (OFDMA) waveforms, the operating point is so maintained that we have considerable amount of current dissipated even when there are no users latched on the network. 
+Hence, turning off the cells is an effective way of addressing this loss.
+However, due to the constantly fluctuating nature of network traffic, maintaining such a state is not always effective. 
+Therefore, we also need to activate the cells when the system requires it.
+The seemingly simple decision of cell control involves multiple \textit{considerations} that must be carefully considered:
+\begin{itemize}
+    \item[$\boldsymbol{\mathsf{C1}}$:] What is the optimal timing for deactivation and reactivation of these cells?
+    \item[$\boldsymbol{\mathsf{C2}}$:] Which cells should be deactivated to maximize power savings while minimizing impact on the QoS? 
+    \item[$\boldsymbol{\mathsf{C3}}$:] How can we ensure that this policy does not negatively affect overall system performance? 
+\end{itemize}
+\noindent We answer these questions 
+Throughout this paper, we will demonstrate how our designed components address each of these crucial challenges, providing a comprehensive solution to the cell shutdown optimization problem.
+
+
+\input{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images/solution_figure.tex}

@@ -1,0 +1,152 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{11}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Aboelwafa et~al\mbox{.}(2020)]%
+        {mimo-siso}
+\bibfield{author}{\bibinfo{person}{Mariam Aboelwafa}, \bibinfo{person}{Mohamed Zaki}, \bibinfo{person}{Ayman Gaber}, \bibinfo{person}{Karim Seddik}, \bibinfo{person}{Yasser Gadallah}, {and} \bibinfo{person}{Ayman Elezabi}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Machine Learning-Based MIMO Enabling Techniques for Energy Optimization in Cellular Networks}. In \bibinfo{booktitle}{\emph{2020 IEEE 17th Annual Consumer Communications \& Networking Conference (CCNC)}} (Las Vegas, NV, USA). \bibinfo{publisher}{IEEE Press}, \bibinfo{pages}{1–6}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/CCNC46108.2020.9045149}
+\showDOI{\tempurl}
+
+
+\bibitem[Breiman(2001)]%
+        {svh}
+\bibfield{author}{\bibinfo{person}{Leo Breiman}.} \bibinfo{year}{2001}\natexlab{}.
+\newblock \showarticletitle{{Statistical Modeling: The Two Cultures (with comments and a rejoinder by the author)}}.
+\newblock \bibinfo{journal}{\emph{Statist. Sci.}} \bibinfo{volume}{16}, \bibinfo{number}{3} (\bibinfo{year}{2001}), \bibinfo{pages}{199 -- 231}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1214/ss/1009213726}
+\showDOI{\tempurl}
+
+
+\bibitem[CloudRF(2024)]%
+        {cloudrf}
+\bibfield{author}{\bibinfo{person}{CloudRF}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{CloudRF}}.
+\newblock
+\urldef\tempurl%
+\url{https://www.cloudrf.com/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Fourati et~al\mbox{.}(2023)]%
+        {heuristics2}
+\bibfield{author}{\bibinfo{person}{Hasna Fourati}, \bibinfo{person}{Rihab Maaloul}, \bibinfo{person}{Lamia Fourati}, {and} \bibinfo{person}{Mohamed Jmaiel}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{An Efficient Energy-Saving Scheme Using Genetic Algorithm for 5G Heterogeneous Networks}.
+\newblock \bibinfo{journal}{\emph{IEEE Systems Journal}} \bibinfo{volume}{17}, \bibinfo{number}{1} (\bibinfo{year}{2023}), \bibinfo{pages}{589--600}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/JSYST.2022.3166228}
+\showDOI{\tempurl}
+
+
+\bibitem[Fu and Wang(2022)]%
+        {bbu}
+\bibfield{author}{\bibinfo{person}{Yongqin Fu} {and} \bibinfo{person}{Xianbin Wang}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Traffic Prediction-Enabled Energy-Efficient Dynamic Computing Resource Allocation in CRAN Based on Deep Learning}.
+\newblock \bibinfo{journal}{\emph{IEEE Open Journal of the Communications Society}}  \bibinfo{volume}{3} (\bibinfo{year}{2022}), \bibinfo{pages}{159--175}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/OJCOMS.2022.3146886}
+\showDOI{\tempurl}
+
+
+\bibitem[Gelenbe(2023)]%
+        {ict-energy}
+\bibfield{author}{\bibinfo{person}{Erol Gelenbe}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Electricity Consumption by ICT: Facts, trends, and measurements}.
+\newblock \bibinfo{journal}{\emph{Ubiquity}} \bibinfo{volume}{2023}, \bibinfo{number}{August}, Article \bibinfo{articleno}{1} (\bibinfo{date}{Aug.} \bibinfo{year}{2023}), \bibinfo{numpages}{15}~pages.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3613207}
+\showDOI{\tempurl}
+
+
+\bibitem[Henderson et~al\mbox{.}(2008)]%
+        {ns3}
+\bibfield{author}{\bibinfo{person}{Thomas~R Henderson}, \bibinfo{person}{Mathieu Lacage}, \bibinfo{person}{George~F Riley}, \bibinfo{person}{Craig Dowell}, {and} \bibinfo{person}{Joseph Kopena}.} \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Network simulations with the ns-3 simulator}.
+\newblock \bibinfo{journal}{\emph{SIGCOMM demonstration}} \bibinfo{volume}{14}, \bibinfo{number}{14} (\bibinfo{year}{2008}), \bibinfo{pages}{527}.
+\newblock
+
+
+\bibitem[Liu and Kung(2023)]%
+        {heuristics1}
+\bibfield{author}{\bibinfo{person}{Yin-Hsin Liu} {and} \bibinfo{person}{Bo-Chen Kung}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Energy Saving in 5G Cellular Networks using Machine Learning Based Cell Sleep Strategy}. In \bibinfo{booktitle}{\emph{2023 24st Asia-Pacific Network Operations and Management Symposium (APNOMS)}}. \bibinfo{pages}{154--159}.
+\newblock
+
+
+\bibitem[{Next Generation Mobile Networks (NGMN)}(2024)]%
+        {ict2}
+\bibfield{author}{\bibinfo{person}{{Next Generation Mobile Networks (NGMN)}}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Sustainability Challenges and Initiatives in Mobile Networks}}.
+\newblock \bibinfo{type}{{T}echnical {R}eport}. \bibinfo{institution}{NGMN Alliance}.
+\newblock
+\urldef\tempurl%
+\url{https://www.ngmn.org/publications/sustainability-challenges-and-initiatives-in-mobile-networks.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Thiruvasagam et~al\mbox{.}(2023)]%
+        {ict1}
+\bibfield{author}{\bibinfo{person}{Prabhu~Kaliyammal Thiruvasagam}, \bibinfo{person}{Chandrasekar T}, \bibinfo{person}{Vinay Venkataram}, \bibinfo{person}{Vivek~Raja Ilangovan}, \bibinfo{person}{Maneesha Perapalla}, \bibinfo{person}{Rajisha Payyanur}, \bibinfo{person}{Senthilnathan~M D}, \bibinfo{person}{Vishal Kumar}, {and} \bibinfo{person}{Kokila J}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{Open RAN: Evolution of Architecture, Deployment Aspects, and Future Directions}.
+\newblock
+\newblock
+\showeprint[arxiv]{2301.06713}
+
+
+\bibitem[Wu et~al\mbox{.}(2021)]%
+        {rl}
+\bibfield{author}{\bibinfo{person}{Qiong Wu}, \bibinfo{person}{Xu Chen}, \bibinfo{person}{Zhi Zhou}, \bibinfo{person}{Liang Chen}, {and} \bibinfo{person}{Junshan Zhang}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Deep Reinforcement Learning With Spatio-Temporal Traffic Forecasting for Data-Driven Base Station Sleep Control}.
+\newblock \bibinfo{journal}{\emph{IEEE/ACM Transactions on Networking}} \bibinfo{volume}{29}, \bibinfo{number}{2} (\bibinfo{year}{2021}), \bibinfo{pages}{935--948}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/TNET.2021.3053771}
+\showDOI{\tempurl}
+
+
+\end{thebibliography}

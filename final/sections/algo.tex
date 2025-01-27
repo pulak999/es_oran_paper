@@ -1,0 +1,113 @@
+\section{Decision Algorithm}
+\label{sec:algorithm}
+
+\subsection{Overview}
+
+The following subsections provide a detailed workflow of the solution discussed in the previous secction, along with an in-depth explanation of the components involved in this decision-making process.
+This section provides answers to the challenges outlined in the \hyperref[sec:ps]{Problem Statement}. Each component and its corresponding challenge are discussed in detail.
+
+Within the O-RAN framework, the application manifests as a rApp hosted in Non Realtime RIC and the decision is fed to the xApps and SDNR. 
+The data collection and cleaning is done at the edge cloud to take advantage of the distributed processing and avoid pushing large amounts of data to regional data centers.
+Firstly, the E2 Nodes are configured by the Service Management and Orchestration (SMO) to report the data necessary via the O1 Interface. 
+The functioning of the Non-RT RIC and SMO are tightly coupled, which enables the Non-RT RIC to retrieve the collected data through internal SMO communication. 
+
+In our setup, the rApp receives input data from the Radio Database, Traffic Predictor, and Coverage Predictor, each answering a question posed in \ref{sec:ps}.
+The rApp sends a shutdown/bringup policy as a declarative statement, across the A1 interface, to the Near-RT RIC. 
+A Traffic Steering xApp assists in the “safe harboring” of users connected to an eNB before shutdown and bringup through the handover process. 
+The decision is made periodically, with a 1-hour prediction window and 15-minute slots, i.e., four predictions are made every window. 
+The rApp can import data from RF link simulators and drive tests through an external interface. 
+A Dashboard for visualization of the system setup is also used with individual components represented in the \hyperref[sec:results]{Results}.
+
+\subsection{Decision Making Entity (DME)}
+
+\subsubsection{Cell Deactivation}
+
+The Decision Making Entity, the cornerstone of our Energy Saving Solution, serves two primary functions: determining whether a cell should be considered for shutdown or bringup, and assessing the consequences of energy-saving decisions prior to modifying the network configuration. 
+The decision-making process leverages real-time data and incorporates historical predictions from both the Traffic Predictor and Coverage Predictor.
+The entity utilizes short-term throughput forecasts from the Traffic Predictor to determine whether a cell should be considered for shutdown/bringup.
+The entity considers shutting down a cell if the throughput exceeds a certain threshold, and conversely, contemplates activating a cell if the throughput falls below this threshold.
+
+After finalizing the decision to either activate or shut down a cell, the Coverage Predictor aids the entity in identifying the network sectors that can be deactivated with minimal service disruption. 
+Once the control decision and its target cell are both confirmed, the entity uses the Digital Twin's simulations to assess the potential impact of the energy-saving policy before configuring the network via the SMO.
+The overall functioning of this entity is defined in the procedure detailed in \hyperref[alg:energy_saving_algo]{Algorithm 1}.\\
+
+\input{algos/decision.tex}
+
+\subsection{$\boldsymbol{\Gamma1}$: Traffic Prediction (TP)}
+The Traffic Predictor estimates the net traffic volume for each sector as a function of time, helping us decide when would be an potimum  time for shutdown. 
+There is no existing technology that can model the traffic in a network with 100\% accuracy. 
+This observation is well-established and can be ascribed to the inherent unpredictability of network traffic.
+Our approach emphasizes the use of a predictive model to accurately anticipate network traffic \textit{fluctuations}.
+We establish a throughput threshold, beyond which network configurations require modification. 
+The model is trained with the anticipation that it can guide us towards the appropriate direction of change, accounting for a certain degree of expected error.
+To prevent altering our system's configarition based on an erroneous prediction, we use the Digital Twin to simulate the effects of the change before implementing it in the real network.  
+We intended to find a regression model that, above all, identified the trend and seasonality of traffic fluctuations.
+
+We use an offline model for learning because using a pre-trained model with sufficient data does seem to suffice to predict traffic directions in our given setup.
+%Another reason, we do not use an online model is because traffic data varies irratically and not all the data we recieve is a scenario we want to model for.
+In further versions of the solution, we plan to use an online learning model to update the model with real-time data.
+Keeping in that in mind, we performed a few experiments with different regression models and found that the LSTM model was the best fit for our requirements.
+Although we conducted thorough experiments for model selection and verification, we could not include the details in this paper due to space constraints.
+
+In our solution, this prediction is based on historical data and previous measurements. 
+The Traffic Predictor uses a pre-trained LSTM with 64 cells to forecast these values for the near-future. 
+The LSTM was trained on on initial system data (initial 300 entries from NS3 simulator), using a batch size of 32 and 100 training epochs. 
+The inputs to the LSTM model are throughput, cell to which throughput belongs and the timestamp of the reading.
+Every 1 hr, the model makes four fresh predictions (+15, +30, +45, +60).
+Based on this, a decision on when cell control is to be implemented is made.
+
+\subsection{$\boldsymbol{\Gamma2}$: Digital Twin (DT)}
+
+The Digital Twin is a powerful tool for network management and optimization, as it allows operators to test and predict the effects of changes of a policy in a risk-free virtual environment before implementing it in a real network.
+In the context of our solution, the Digital Twin is used to simulate a cellular network and is used to understand how the cell shutdown/bringup will affect the system overall. 
+Our solution utilizes the same validation process to confirm the effectiveness of our policy decisions.
+
+It is implemented using CloudRF \cite{cloudrf}.
+The coverage area is represented as a 30 x 30 pixel grid, with power readings simulated for each individual pixel.
+CloudRF is used to map out the area of service and simulate the network characteristics across it. 
+CloudRF generates predictions of the expected CQI distribution of the system using a Radio Link budget simulator.
+This system is initialized with network inventory and predicted RF power (downlink) for each pixel from all sectors in service.
+
+\subsection{$\boldsymbol{\Gamma3}$: Coverage Prediction (CP)}
+
+The Coverage Predictor estimates the \textit{coverage overlap}, the areas where signals from neighboring sectors intersect.
+It identifies sectors that, if shut down, would not impact the overall network coverage.
+Sectors exhibiting the highest degree of overlap are prioritized for shutdown, given that their discontinuation is less likely to impact coverage due to the compensatory capabilities of the remaining interconnected sectors.
+
+%It also updates the link level prediction model based on actual measured values to enhance accuracy. 
+The system takes as input the simulated received power level (sourced from CloudRF) for each pixel from the participating sectors. 
+The system outputs a matrix, known as the Coverage Map, which represents the degree of overlap between these sectors. 
+The algorithm for the Coverage Predictor is detailed in \hyperref[alg:coverage_algo]{Algorithm 2}.
+In the algorithm, $E_{ij}$ represents the number of sectors which have overlaps with other sectors.
+
+\input{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/algos/coverage.tex}  
+
+\subsection{Measuring QoS Gurantees}
+
+In the realm of networking, QoS primarily entails ensuring a specific level of performance for a data flow. 
+This is achieved by prioritizing certain network characteristics over others. %\cite{sigcomm}.
+In order to uphold QoS commitments in our system, it is essential to ensure that the implementation of energy-saving policies does not lead to a non-trivial decline in network performance.
+This can be achieved by ensuring the system operates optimally at the outset and maintaining its initial state throughout. This principle guides our approach to monitoring system functioning.
+Among these variables, the \textit{CQI} values of the UEs connected to the active cells and the system's \textit{total throughput} are of paramount importance.
+
+\textit{Why don't we consider the throughput of each individual UE?} Firstly, it's logistically impractical. 
+UEs connect and disconnect from the network at a rapid pace, making it difficult and computationally intensive to track individual allotments.
+Secondly, as long as the total system performance remains consistent with its state prior to control application, our initial QoS is assured.
+Rather than focusing on individual metrics, we concentrate on measuring the system's CQI distribution. 
+A low CQI value signifies poor channel quality, while a high CQI value signifies excellent channel quality. 
+Our goal is to utilize high-quality channels. By consistently maintaining the use of such channels, we can ensure the preservation of the QoS to the users.
+
+The overall system's CQI is measured by assigning each UE to a CQI-value 'bin', which is determined based on the channel quality measured by the core network.
+The distribution of UEs across CQI bins closely mirrors a discrete probability distribution of CQI values across the network.
+We employ the Kullback-Leibler (KL) divergence, a statistical measure from information theory, to ensure that the input or output distributions do not deviate significantly from a baseline distribution.
+The KL divergence of two probability distributions $P$ and $Q$ is defined as:
+
+\begin{equation}
+D_{KL}(P, Q) = \sum_{i} P(i) \log \frac{P(i)}{Q(i)}
+\end{equation}
+\noindent In this context, $P(i)$ and $Q(i)$ represent the probabilities of the $i$th CQI bin in the respective distributions $P$ and $Q$.
+
+We derive the initial CQI distribution from the NS-3 simulator. 
+Subsequently, the rApp policy is applied to generate a new network configuration, which is simulated in the Digital Twin to obtain a subsequent CQI distribution. 
+If the control policy doesn't cause a substantial divergence from the baseline in the simulation (quantified using the previously defined KL Divergence), it is subsequently forwarded to the Near-RT RIC.
+The user sets the difference threshold, $\alpha_{th}$, which varies based on the specific environment the network is present in.

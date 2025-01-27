@@ -1,0 +1,97 @@
+\clearpage
+\appendix
+\newpage
+
+\section{Coverage Algorithm}
+\label{sec:coverage_algo}
+
+\input{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/algos/coverage.tex}  
+
+\section{Dashboard GUI}
+\label{sec:dashboard}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.5\textwidth]{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images/dashboard.png}
+  \caption{ES rApp GUI}
+  \label{fig:dashboard}
+\end{figure}
+
+\section{Design Rationale}
+\label{sec:design_rationale}
+
+In this section, we elucidate our reasoning behind the choice of regression model used to represent the overall network throughput.
+
+\begin{comment}
+\subsection{Decision Variables and Threshold Selection}
+
+The decision-making process in any solution is governed by a set of decision variables that determine the course of action to be taken.
+We proceed to evaluate the performance of our Energy Saving solution in terms of the three metrics mentioned below:
+\begin{itemize}
+  \item \textbf{Network CQI Distribution:} As described in [\textcolor{blue}{CITE}], we categorized the CQI values of the UEs based on the channel quality.
+  \item \textbf{Network Throughput:} This metric represents the total throughput used by all the UEs connected to the system.
+  \item \textbf{System Power Consumption:} This is the total power consumed by the system, measured in Watts (W).
+\end{itemize}
+
+The most important one to consider here is the throughput of the network, which is the primary metric used to decide whether a system needs a change in it's configiration or not.
+The rationale behind this is simple: our focus is on the aggregate network performance, and throughput serves as a reliable metric for this purpose.
+If the network state, specifically the channel quality and overall throughput, remains largely unchanged after the application of network-modifying policies, we deem the result acceptable.
+
+The determination of thresholds for various decision variables is often crucial to the success of the algorithm. 
+In this context, we aim to derive specific expressions to guide the selection of these variables.
+In our proposed solutions, we have three primary decision variables: $\tau$, $\alpha_{th}$, and $P_{th}$.
+- $\tau$ is the threshhold on the forecasted throughput, which is used to decide whether to shut down a cell or not.
+- $\alpha_{th}$ is the allowed divergence of the forecasted/likely CQI distribution from the current CQI distribution. It is used to decide whether a policy should be implemented or not.
+- $P_{th}$ is the threshold on the power consumption of the cell. Only cells function above a certain energy-consumption threshold are to be considered for shutdown/bringup.
+\\
+\textcolor{red}{[PRAMIT] \\
+Could you please provide a short write-up on how $\tau$, $\alpha_{th}$ and $P_{th}$ are selected? What are the factors we consider?}
+\end{comment}
+
+\subsection{Datasets In Use}
+
+We intended to find a regression model that, above all, identified the trend and seasonlity of traffic fluctuations.
+The models underwent evaluation using a mix of four real-world and five synthetic time-series datasets, each exhibiting diverse trends and seasonal patterns:
+
+\begin{itemize}
+  \item Dataset 1: COMED Dataset - This real-world dataset, released by the Commonwealth Edison Company, illustrates the temporal variations in power consumption across a specific group of households.
+  \item Dataset 2: Microsoft Dataset - This dataset, obtained using a data scraper, encapsulates the temporal variations in Microsoft's stock price.
+  \item Dataset 3: Temperature Dataset - This dataset, sourced from Kaggle, depicts the temporal progression of the Earth's surface temperature.
+  \item Dataset 4: No Trend Dataset - This synthetic dataset, created using a blend of sinusoidal and random noise functions, exhibits no discernible trend or seasonality.
+  \item Dataset 5: Upwards Trend Dataset - This synthetic dataset is similar to Dataset 4, but it exhibits a noticeable upward trend (without any seasonality).
+  \item Dataset 6: Downwards Trend Dataset - This synthetic dataset is similar to Dataset 4, but it exhibits a noticeable downward trend (without any seasonality).
+  \item Dataset 7: Upwards Trend Dataset with Seasonality - Dataset 5 with added seasonality.
+  \item Dataset 8: Downwards Trend Dataset with Seasonality - Dataset 6 with added seasonality.
+  \item Dataset 9: Simulator Dataset - A synthetic dataset generated using our ns-3 simulator, taken to ensure that these models perform with traffic data and not just randomized time-serieses.
+\end{itemize}
+
+\subsection{Model Selection}
+\input{tables/model_comp.tex}
+
+The choice of regression model used for Traffic Prediction is crucial to the success of the solution.
+In this section, we compare the performance of three different regression models: Prophet, ARIMA, and LSTMs.
+We train our models on all our real-world datasets (COMED, Microsoft and Temperature) and evaluate their performance on a validation set of the same dataset.
+Our findings can be seen in \hyperref[tab:model_comp]{Table 1}.
+We observe that the LSTM model outperforms Prophet, capturing the trend and seasonlity of the data the best.
+The ARIMA model was found to be outright the worst performer, both taking the longest to train as well making forecasts completely ignoring the trend and seasonlity of the inputed data.
+Considering how promising the LSTM's performance seemed, we decided to further evaluate the same.
+
+\subsection{Model Verification}
+\input{tables/lstm_synthetic.tex}
+
+After arriving at using LSTMs as the model of choice for traffic forecasting, we had to ensure that the model would be able to handle the simulated load. 
+We did so using synthetic data of various types, as outlined in our Dataset section.
+To verify the robustness of the model's forecasts, we trained the LSTM models using a diverse range of datasets, each exhibiting unique general trends.
+For each dataset, we trained a corresponding LSTM model. 
+We used Mean Squared Error (MSE) as an evaluation index to evaluate the forecast accuracy of the models.
+Subsequently, we cross-validated each trained model with the remaining datasets.
+The MSE values of all the trained models and the datasets in use is described in in \hyperref[tab:lstm_performance]{Table 2}.
+We observe that the LSTM trained on data with more seasonlity (model 7,8 and 9) perform the best all around, with the lowest MSE values.
+This is expected, as the LSTM model is designed to capture the long-term dependencies in the data, which are more prevalent in datasets with seasonality.
+  
+Therefore, when training our model on real-world data, we should ensure that the data has a significant amount of seasonality to ensure the best performance.  
+The amount of data used to train the LSTM model is crucial to the success of the solution.
+If we train the model on excessive data, the model may overfit to the training data and fail to generalize to unseen data.
+This would be especially catastrophic in our specific use case, as we
+This will depend on the deployemnt environment's complexity, and in our specific setup we found 300 samples to suffice.
+

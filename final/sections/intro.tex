@@ -1,0 +1,49 @@
+\section{Introduction}
+\label{sec:intro}
+
+%% WHAT IS THE PROBLEM?
+
+With the advancements in techniques to pack maximum data over the communication channel, the Information and Communication Technology (ICT) industry has devised technologies which help us reach the Shannon’s limit on amount of data that can be reliably transferred over a channel. 
+%This includes the use of efficient channel coding techniques, such as Low Density Parity Checks (LDPC), and the spatial reuse of channels, as seen in Multi-user MIMO. 
+%The latter is often coupled with beamforming to direct data towards specific users or groups of users.
+One of the most common methods to meet the ever-increasing service demands of the online public is harvesting more spectra for mobile communication networks, like the C-band which provides hundreds of MHz of bandwidth and millimeter wavelength spectrum which offers GHz of spectrum. 
+%Achieving energy-efficiency in cellular networks is not practicable without paying special attention to the all energy consuming aspects of the network.
+What is often overlooked are the aspects of practical realization of these techniques which demand huge computation resources both at the radio units as well as for processing within the base-band. 
+The energy consumption of mobile networks is a significant concern, with the ICT industry accounting for 10\% of of the worldwide electricity consumption, a figure that is expected to double by 2025 \cite{ict-energy}.
+Achieving energy efficiency in mobile networks, especially with the increasing deployment of 5G networks, is a significant issue facing the ICT industry to meet their goal of net zero emissions by 2050. 
+
+Within a mobile network, Radio Access Networks (RAN) have been found to be one the most significant users of a mobile network's total power supplied\cite{ict1, ict2}.
+% Recent advancements, such as the Open RAN (O-RAN) initiative \cite{oran}, have paved the way for the use of RAN Intelligent Controllers (RICs). 
+% These flexible platforms provide robust control over RAN, and we have incorporated them into our system.
+% The disaggregation introduced in O-RAN paves way for the introduction of several network optimization techniques without disturbing  core functionalities.
+% O-RAN control is enabled using applications called xApps (for the Near-Real-Time RIC) and rApps (for the Non-Real-Time RIC), with the choice of the implementation made depending on the time-frame of the control required.
+
+This paper examines one of the simplest techniques for energy savings - powering off unused nodes. 
+It aims to establish formalisms for analyzing this technique and its impact on the Quality of Service (QoS) as perceived by the end users.
+With the flexibility of implementation intrroduced by the O-RAN initiative, we have tested out the algorithim in a rApp compatible with any O-RAN compliant network. 
+Our approach distinguishes itself from existing solutions by leveraging a statistically motivated framework rather than relying heavily on heuristics \cite{heuristics1,heuristics2}. 
+
+Statistical approaches offer a more robust and data-driven foundation for decision-making compared to heuristic methods as is argued well in \cite{svh}. 
+This approach allows for better adaptation to dependence on the inherent variability and unpredictability of network traffic patterns. 
+%By utilizing statistical models, our solution can account for both short-term fluctuations and long-term trends in network usage, leading to more accurate and reliable cell shutdown decisions. 
+%Moreover, statistical methods provide quantifiable measures of uncertainty and confidence, enabling network operators to make risk-aware decisions and better understand the potential impacts of their actions.
+While previous implementations often employ techniques such as toggling between MIMO and SISO \cite{mimo-siso}, using reinforcement learning \cite{rl}, or realloacting BBUs \cite{bbu}, our method focuses on a more fundamental statistical analysis of network behavior. 
+This statistical foundation allows for a more robust and generalizable solution that can be easily adapted to various network configurations without the need for extensive training or parameter tuning.
+Unlike approaches that require specific network configurations or rely on proprietary systems, our method integrates seamlessly with the O-RAN architecture through the use of rApps. 
+\hyperref[fig:system-architecture]{Figure 1} describes this interfacing with respect to traditional O-RAN architecture. 
+
+By combining statistical rigor with O-RAN compatibility, our approach offers a unique balance of effectiveness and practicality that sets it apart from the more heuristic-driven or computationally intensive methods prevalent in the current literature.
+The main contributions of this paper can be summarised as follows:
+\begin{itemize}
+    \item Introduced a statistical metric to evaluate the effectiveness of implemented policies, offering a method to validate decisions prior to implementation.
+    \item Developed a swift and efficient method for cell shutdown, eliminating the need for excessive KPI calls or extensive training time.
+    \item Implemented and detailed a novel solution that is readily deployable across all O-RAN compliant networks.
+\end{itemize}
+
+The remainder of this paper is organized into six sections, as follows.
+Section 2 provides an overview of the problem at hand and outlines our proposed approach to address it.
+Section 3 details our energy saving solution, while Section 4 provides an algorithm to arrive at an optimal solution.
+The results obtained from the rApp evaluation using the software-defined NS-3 simulator are depicted and discussed in Section 5. 
+Finally, Section 6 concludes the paper and suggests future research directions.
+
+\input{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images/rapp_arch.tex}

@@ -1,0 +1,27 @@
+\section{Energy-Saving Solution}
+\subsection{Overview}
+\label{sec:overview}
+
+The solution to address the three aspects of the problem discussed in the previous section comprises of several components. 
+\hyperref[fig:sol]{Figure 2} outlines a simplified version of how the components interact with each other to implement our ES solution. 
+The data at each stage of the operational flow is indicated by numbers (1..6). 
+
+The system is fed with the key performance indicators (KPI) data captured from the network (1) along with topology and configuration information (2). 
+The former is consumed by the traffic predictor to determine if in the upcoming hours, the volume of the traffic changes by an amount necessary to relook at the current state of all the nodes. 
+The topology and configuration data (2) is static information usually gathered from the Element Management System (EMS). 
+The decision algorithm relies on the predicted traffic estimates (3) and the overlap predictions (5) to determine the state of the network, i.e., which nodes should be turned on and which should be off. 
+
+However, at this stage, we need to make sure that such a decision is not detrimental to the performance of the network. 
+Hence, it is run by the Digital Twin of the network to evaluate the “goodness” and if it passes a threshold, it is presented to the actual control unit, the EMS, for execution. 
+Otherwise, we reevaluate the decision. 
+
+Each of the components are complex systems and described in the following sections.
+The rApp is data driven in the sense that it does not incorporate a rigid logic for cell shutdown, but instead determines the rules which meet the target objective based on the input data and network configuration. 
+The non-RT RIC, in particular, is designed to handle tasks that do not require immediate response. 
+This makes it ideal for applications focused on long-term optimization and strategic planning, such as energy control. 
+
+%\input{/Users/pulakmehrotra/Desktop/SaankhyaLabs/es_oran_paper/acm_version_final/images/rapp_arch.tex}
+
+\subsection{Base Station Control Algorithm}
+
+\input{algos/decision.tex}
